@@ -22,6 +22,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
+  // Ensure user exists before creating OTP (FK constraint on OtpToken.email -> User.email)
+  await prisma.user.upsert({
+    where: { email },
+    update: {},
+    create: { email },
+  });
+
   // Invalidate previous unused OTPs for this email
   await prisma.otpToken.updateMany({
     where: { email, usedAt: null, expiresAt: { gt: new Date() } },
