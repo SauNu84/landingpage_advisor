@@ -2,6 +2,7 @@ import { randomInt } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendOtpEmail } from "@/lib/email";
+import { logger } from "@/lib/logger";
 
 const OTP_EXPIRY_MINUTES = 15;
 
@@ -42,7 +43,15 @@ export async function POST(request: NextRequest) {
     data: { email, token, expiresAt },
   });
 
-  await sendOtpEmail(email, token);
+  try {
+    await sendOtpEmail(email, token);
+  } catch (err) {
+    logger.error("request-otp", "Failed to send OTP email", err, { email });
+    return NextResponse.json(
+      { error: "Failed to send sign-in email. Please try again." },
+      { status: 500 }
+    );
+  }
 
   return NextResponse.json({ ok: true });
 }

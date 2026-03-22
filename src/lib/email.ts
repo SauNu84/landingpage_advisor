@@ -4,8 +4,11 @@ export async function sendOtpEmail(to: string, otp: string): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
 
   if (!apiKey) {
-    // Dev mode: log to console
-    logger.info("otp", "sign-in code generated (dev mode)", { to, otp });
+    logger.warn(
+      "email",
+      "RESEND_API_KEY is not set — email not sent (dev mode only)",
+      { to, otp }
+    );
     return;
   }
 
@@ -14,7 +17,7 @@ export async function sendOtpEmail(to: string, otp: string): Promise<void> {
   const from =
     process.env.EMAIL_FROM ?? "Landing Page Advisor <noreply@landingpageadvisor.com>";
 
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from,
     to,
     subject: "Your Landing Page Advisor sign-in code",
@@ -28,4 +31,9 @@ export async function sendOtpEmail(to: string, otp: string): Promise<void> {
       </div>
     `,
   });
+
+  if (error) {
+    logger.error("email", "Resend API error — failed to send OTP email", error, { to });
+    throw new Error(`Failed to send OTP email: ${error.message}`);
+  }
 }
