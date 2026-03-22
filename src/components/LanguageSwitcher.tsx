@@ -4,9 +4,9 @@ import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/navigation";
 
 const LOCALES = [
-  { code: "en", label: "EN" },
-  { code: "vi", label: "VI" },
-  { code: "de", label: "DE" },
+  { code: "en", label: "🇺🇸 EN" },
+  { code: "vi", label: "🇻🇳 VI" },
+  { code: "de", label: "🇩🇪 DE" },
 ] as const;
 
 export function LanguageSwitcher() {
