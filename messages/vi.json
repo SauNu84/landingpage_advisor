@@ -1,0 +1,171 @@
+{
+  "Common": {
+    "appName": "Cố vấn Trang đích",
+    "poweredBy": "Được hỗ trợ bởi Claude · 6 phân tích chuyên gia + Hướng dẫn theo dõi PostHog"
+  },
+  "ExpertMeta": {
+    "uiDesign": "UI / Hệ thống Thiết kế",
+    "uxResearch": "Nghiên cứu UX",
+    "experiment": "Nhà thiết kế Thí nghiệm",
+    "content": "Nội dung / Bản sao",
+    "seo": "Chuyên gia SEO",
+    "psychology": "Tâm lý học Marketing"
+  },
+  "HomePage": {
+    "subtitle": "Nhận phản hồi chuyên nghiệp về bất kỳ trang đích nào — trong vài giây.",
+    "expertLabels": {
+      "uiDesign": "Chuyên gia Phân tích UI/Thiết kế",
+      "uxResearch": "Nhà thiết kế Nghiên cứu UX",
+      "experiment": "Nhà thiết kế Thí nghiệm",
+      "content": "Chuyên gia Phân tích Nội dung/Bản sao",
+      "seo": "Chuyên gia SEO",
+      "psychology": "Nhà tâm lý học Marketing",
+      "posthog": "Cố vấn Theo dõi PostHog"
+    },
+    "compareExpertLabels": {
+      "scraping": "Đang thu thập cả hai trang…",
+      "uiDesign": "Phân tích UI/Thiết kế (×2)…",
+      "uxResearch": "Phân tích Nghiên cứu UX (×2)…",
+      "experiment": "Nhà thiết kế Thí nghiệm (×2)…",
+      "content": "Phân tích Nội dung/Bản sao (×2)…",
+      "seo": "Phân tích SEO (×2)…",
+      "psychology": "Tâm lý học Marketing (×2)…",
+      "posthog": "Cố vấn PostHog (×2)…"
+    },
+    "expertBadges": {
+      "uiDesign": "UI/Thiết kế",
+      "uxResearch": "Nghiên cứu UX",
+      "experiment": "Thí nghiệm",
+      "content": "Nội dung",
+      "seo": "SEO",
+      "psychology": "Tâm lý học",
+      "posthog": "PostHog"
+    },
+    "modeToggle": {
+      "single": "Một URL",
+      "compare": "So sánh trang"
+    },
+    "singleForm": {
+      "label": "URL trang đích",
+      "placeholder": "https://trang-dich-cua-ban.com",
+      "button": "Phân tích trang"
+    },
+    "compareForm": {
+      "myPage": "Trang của tôi",
+      "myPagePlaceholder": "https://trang-dich-cua-toi.com",
+      "competitor": "Trang đối thủ",
+      "competitorPlaceholder": "https://doi-thu.com",
+      "button": "So sánh trang"
+    },
+    "errors": {
+      "enterUrl": "Vui lòng nhập URL.",
+      "invalidUrl": "Vui lòng nhập URL hợp lệ (ví dụ: https://example.com).",
+      "enterBothUrls": "Vui lòng nhập cả hai URL.",
+      "invalidBothUrls": "Vui lòng nhập URL hợp lệ cho cả hai trang.",
+      "analysisFailed": "Phân tích thất bại.",
+      "comparisonFailed": "So sánh thất bại.",
+      "unexpected": "Lỗi không mong đợi."
+    }
+  },
+  "LoadingExpert": {
+    "title": "Đang phân tích trang của bạn",
+    "subtitle": "Hội đồng chuyên gia đang xem xét trang đích của bạn…",
+    "analyzing": "đang phân tích…",
+    "done": "hoàn thành",
+    "waiting": "đang chờ"
+  },
+  "AnalyzePage": {
+    "back": "← Phân tích trang khác",
+    "overallScore": "Điểm tổng · {count} chuyên gia",
+    "analysedAt": "Đã phân tích {date}",
+    "topPriorityActions": "Hành động ưu tiên hàng đầu",
+    "expertAnalyses": "Phân tích Chuyên gia",
+    "postHogTrackingPlan": "Kế hoạch Theo dõi PostHog",
+    "emailSection": {
+      "title": "Gửi email báo cáo này",
+      "subtitle": "Nhận bản sao báo cáo này vào hộp thư của bạn.",
+      "placeholder": "ban@example.com",
+      "send": "Gửi",
+      "sending": "Đang gửi…",
+      "sent": "Đường link báo cáo đã được gửi vào hộp thư của bạn",
+      "error": "Đã xảy ra lỗi. Vui lòng thử lại."
+    },
+    "share": {
+      "copied": "Đã sao chép liên kết!",
+      "button": "Chia sẻ báo cáo này"
+    }
+  },
+  "ComparePage": {
+    "back": "← So sánh trang khác",
+    "scoreSummary": "Tóm tắt điểm",
+    "tableHeaders": {
+      "expert": "Chuyên gia",
+      "myPage": "Trang của tôi",
+      "competitor": "Đối thủ",
+      "delta": "Chênh lệch"
+    },
+    "overall": "Tổng",
+    "expertAnalysesSideBySide": "Phân tích Chuyên gia — So sánh song song",
+    "myPage": "Trang của tôi",
+    "competitor": "Đối thủ",
+    "share": {
+      "copied": "Đã sao chép liên kết!",
+      "button": "Chia sẻ so sánh này"
+    }
+  },
+  "ExpertCard": {
+    "topPriorities": "Ưu tiên hàng đầu",
+    "showDetails": "Xem tất cả chi tiết",
+    "hideDetails": "Ẩn chi tiết",
+    "strengths": "✓ Điểm mạnh",
+    "weaknesses": "✗ Điểm yếu",
+    "allRecommendations": "Tất cả khuyến nghị",
+    "impact": "Tác động: {value}",
+    "tie": "hòa",
+    "priorities": {
+      "high": "cao",
+      "medium": "trung bình",
+      "low": "thấp"
+    }
+  },
+  "ScoreGauge": {
+    "excellent": "Xuất sắc",
+    "good": "Tốt",
+    "fair": "Khá",
+    "poor": "Kém"
+  },
+  "ComparisonBanner": {
+    "overallComparison": "So sánh tổng thể",
+    "itsATie": "Hòa nhau!",
+    "winsOverall": "{hostname} thắng tổng thể (+{points} điểm)",
+    "winner": "Người thắng",
+    "myPage": "Trang của tôi",
+    "competitor": "Đối thủ",
+    "outOf100": "/ 100",
+    "winsCategories": "Thắng {wins} trong {total} hạng mục"
+  },
+  "PostHogGuide": {
+    "title": "Hướng dẫn Theo dõi PostHog",
+    "subtitle": "{events} sự kiện · {dashboards} bảng điều khiển · sẵn sàng sao chép-dán",
+    "keyMetrics": "Chỉ số chính cần theo dõi",
+    "tabs": {
+      "events": "Kế hoạch theo dõi sự kiện ({count})",
+      "dashboards": "Bảng điều khiển đề xuất ({count})"
+    },
+    "eventsDescription": "Mỗi sự kiện hiển thị loại phân tích PostHog, trực quan hóa và lợi ích kinh doanh được đề xuất.",
+    "dashboardsDescription": "Xây dựng các bảng điều khiển này trong PostHog để theo dõi hiệu suất trang đích của bạn theo thời gian.",
+    "noDashboards": "Không có đề xuất bảng điều khiển nào.",
+    "businessBenefit": "Lợi ích kinh doanh",
+    "postHogView": "Chế độ xem PostHog",
+    "properties": "Thuộc tính",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép!"
+  },
+  "SharedReport": {
+    "banner": "Đây là báo cáo được chia sẻ.",
+    "analyzeOwn": "Phân tích trang của bạn →",
+    "analyzeYourPage": "Phân tích trang của bạn →",
+    "copyShareLink": "Sao chép liên kết chia sẻ",
+    "linkCopied": "Đã sao chép liên kết!"
+  }
+}

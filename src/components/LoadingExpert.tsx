@@ -1,11 +1,15 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 interface LoadingExpertProps {
   experts: string[];
   currentIndex: number;
 }
 
 export function LoadingExpert({ experts, currentIndex }: LoadingExpertProps) {
+  const t = useTranslations("LoadingExpert");
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-md">
@@ -26,11 +30,9 @@ export function LoadingExpert({ experts, currentIndex }: LoadingExpertProps) {
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Analyzing your page
+            {t("title")}
           </h2>
-          <p className="text-gray-500 text-sm">
-            Our expert panel is reviewing your landing page…
-          </p>
+          <p className="text-gray-500 text-sm">{t("subtitle")}</p>
         </div>
 
         {/* Expert progress list */}
@@ -85,15 +87,15 @@ export function LoadingExpert({ experts, currentIndex }: LoadingExpertProps) {
                 </span>
                 {isActive && (
                   <span className="ml-auto text-xs text-indigo-500 animate-pulse">
-                    analyzing…
+                    {t("analyzing")}
                   </span>
                 )}
                 {isDone && (
-                  <span className="ml-auto text-xs text-green-600">done</span>
+                  <span className="ml-auto text-xs text-green-600">{t("done")}</span>
                 )}
                 {isPending && (
                   <span className="ml-auto text-xs text-gray-300">
-                    waiting
+                    {t("waiting")}
                   </span>
                 )}
               </div>

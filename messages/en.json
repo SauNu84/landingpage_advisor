@@ -1,0 +1,171 @@
+{
+  "Common": {
+    "appName": "Landing Page Advisor",
+    "poweredBy": "Powered by Claude · 6 expert analyses + PostHog tracking guide"
+  },
+  "ExpertMeta": {
+    "uiDesign": "UI / Design System",
+    "uxResearch": "UX Research",
+    "experiment": "Experiment Designer",
+    "content": "Content / Copy",
+    "seo": "SEO Expert",
+    "psychology": "Marketing Psychology"
+  },
+  "HomePage": {
+    "subtitle": "Get expert-quality feedback on any landing page — in seconds.",
+    "expertLabels": {
+      "uiDesign": "UI/Design System Analyst",
+      "uxResearch": "UX Research Designer",
+      "experiment": "Experiment Designer",
+      "content": "Content/Copy Analyst",
+      "seo": "SEO Expert",
+      "psychology": "Marketing Psychologist",
+      "posthog": "PostHog Tracking Advisor"
+    },
+    "compareExpertLabels": {
+      "scraping": "Scraping both pages…",
+      "uiDesign": "UI/Design analysis (×2)…",
+      "uxResearch": "UX Research analysis (×2)…",
+      "experiment": "Experiment Designer (×2)…",
+      "content": "Content/Copy analysis (×2)…",
+      "seo": "SEO analysis (×2)…",
+      "psychology": "Marketing Psychology (×2)…",
+      "posthog": "PostHog Advisor (×2)…"
+    },
+    "expertBadges": {
+      "uiDesign": "UI/Design",
+      "uxResearch": "UX Research",
+      "experiment": "Experiments",
+      "content": "Content",
+      "seo": "SEO",
+      "psychology": "Psychology",
+      "posthog": "PostHog"
+    },
+    "modeToggle": {
+      "single": "Single URL",
+      "compare": "Compare Pages"
+    },
+    "singleForm": {
+      "label": "Landing page URL",
+      "placeholder": "https://your-landing-page.com",
+      "button": "Analyze Page"
+    },
+    "compareForm": {
+      "myPage": "My Page",
+      "myPagePlaceholder": "https://my-landing-page.com",
+      "competitor": "Competitor Page",
+      "competitorPlaceholder": "https://competitor.com",
+      "button": "Compare Pages"
+    },
+    "errors": {
+      "enterUrl": "Please enter a URL.",
+      "invalidUrl": "Please enter a valid URL (e.g. https://example.com).",
+      "enterBothUrls": "Please enter both URLs.",
+      "invalidBothUrls": "Please enter valid URLs for both pages.",
+      "analysisFailed": "Analysis failed.",
+      "comparisonFailed": "Comparison failed.",
+      "unexpected": "Unexpected error."
+    }
+  },
+  "LoadingExpert": {
+    "title": "Analyzing your page",
+    "subtitle": "Our expert panel is reviewing your landing page…",
+    "analyzing": "analyzing…",
+    "done": "done",
+    "waiting": "waiting"
+  },
+  "AnalyzePage": {
+    "back": "← Analyze another",
+    "overallScore": "Overall score · {count} experts",
+    "analysedAt": "Analysed {date}",
+    "topPriorityActions": "Top priority actions",
+    "expertAnalyses": "Expert Analyses",
+    "postHogTrackingPlan": "PostHog Tracking Plan",
+    "emailSection": {
+      "title": "Email me this report",
+      "subtitle": "Get a copy of this report sent to your inbox.",
+      "placeholder": "you@example.com",
+      "send": "Send",
+      "sending": "Sending…",
+      "sent": "Report link sent to your inbox",
+      "error": "Something went wrong. Please try again."
+    },
+    "share": {
+      "copied": "Link copied!",
+      "button": "Share this report"
+    }
+  },
+  "ComparePage": {
+    "back": "← Compare another",
+    "scoreSummary": "Score Summary",
+    "tableHeaders": {
+      "expert": "Expert",
+      "myPage": "My Page",
+      "competitor": "Competitor",
+      "delta": "Delta"
+    },
+    "overall": "Overall",
+    "expertAnalysesSideBySide": "Expert Analyses — Side by Side",
+    "myPage": "My Page",
+    "competitor": "Competitor",
+    "share": {
+      "copied": "Link copied!",
+      "button": "Share this comparison"
+    }
+  },
+  "ExpertCard": {
+    "topPriorities": "Top priorities",
+    "showDetails": "Show all details",
+    "hideDetails": "Hide details",
+    "strengths": "✓ Strengths",
+    "weaknesses": "✗ Weaknesses",
+    "allRecommendations": "All Recommendations",
+    "impact": "Impact: {value}",
+    "tie": "tie",
+    "priorities": {
+      "high": "high",
+      "medium": "medium",
+      "low": "low"
+    }
+  },
+  "ScoreGauge": {
+    "excellent": "Excellent",
+    "good": "Good",
+    "fair": "Fair",
+    "poor": "Poor"
+  },
+  "ComparisonBanner": {
+    "overallComparison": "Overall Comparison",
+    "itsATie": "It's a tie!",
+    "winsOverall": "{hostname} wins overall (+{points} pts)",
+    "winner": "Winner",
+    "myPage": "My Page",
+    "competitor": "Competitor",
+    "outOf100": "/ 100",
+    "winsCategories": "Wins {wins} of {total} categories"
+  },
+  "PostHogGuide": {
+    "title": "PostHog Tracking Guide",
+    "subtitle": "{events} events · {dashboards} dashboards · copy-paste ready",
+    "keyMetrics": "Key metrics to track",
+    "tabs": {
+      "events": "Event Tracking Plan ({count})",
+      "dashboards": "Suggested Dashboards ({count})"
+    },
+    "eventsDescription": "Each event shows the recommended PostHog analysis type, visualization, and business benefit.",
+    "dashboardsDescription": "Build these dashboards in PostHog to monitor your landing page performance over time.",
+    "noDashboards": "No dashboard suggestions available.",
+    "businessBenefit": "Business benefit",
+    "postHogView": "PostHog view",
+    "properties": "Properties",
+    "copy": "Copy",
+    "copied": "Copied!"
+  },
+  "SharedReport": {
+    "banner": "This is a shared report.",
+    "analyzeOwn": "Analyze your own page →",
+    "analyzeYourPage": "Analyze your page →",
+    "copyShareLink": "Copy share link",
+    "linkCopied": "Link copied!"
+  }
+}

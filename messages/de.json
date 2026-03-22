@@ -1,0 +1,171 @@
+{
+  "Common": {
+    "appName": "Landing Page Berater",
+    "poweredBy": "Betrieben von Claude · 6 Expertenanalysen + PostHog Tracking-Leitfaden"
+  },
+  "ExpertMeta": {
+    "uiDesign": "UI / Design-System",
+    "uxResearch": "UX-Forschung",
+    "experiment": "Experiment-Designer",
+    "content": "Inhalt / Text",
+    "seo": "SEO-Experte",
+    "psychology": "Marketing-Psychologie"
+  },
+  "HomePage": {
+    "subtitle": "Erhalten Sie professionelles Feedback zu jeder Landing Page — in Sekunden.",
+    "expertLabels": {
+      "uiDesign": "UI/Design-System-Analyst",
+      "uxResearch": "UX-Forschungsdesigner",
+      "experiment": "Experiment-Designer",
+      "content": "Inhalts-/Text-Analyst",
+      "seo": "SEO-Experte",
+      "psychology": "Marketing-Psychologe",
+      "posthog": "PostHog Tracking-Berater"
+    },
+    "compareExpertLabels": {
+      "scraping": "Beide Seiten werden abgerufen…",
+      "uiDesign": "UI/Design-Analyse (×2)…",
+      "uxResearch": "UX-Forschungsanalyse (×2)…",
+      "experiment": "Experiment-Designer (×2)…",
+      "content": "Inhalts-/Text-Analyse (×2)…",
+      "seo": "SEO-Analyse (×2)…",
+      "psychology": "Marketing-Psychologie (×2)…",
+      "posthog": "PostHog Berater (×2)…"
+    },
+    "expertBadges": {
+      "uiDesign": "UI/Design",
+      "uxResearch": "UX-Forschung",
+      "experiment": "Experimente",
+      "content": "Inhalt",
+      "seo": "SEO",
+      "psychology": "Psychologie",
+      "posthog": "PostHog"
+    },
+    "modeToggle": {
+      "single": "Einzelne URL",
+      "compare": "Seiten vergleichen"
+    },
+    "singleForm": {
+      "label": "Landing Page URL",
+      "placeholder": "https://ihre-landing-page.com",
+      "button": "Seite analysieren"
+    },
+    "compareForm": {
+      "myPage": "Meine Seite",
+      "myPagePlaceholder": "https://meine-landing-page.com",
+      "competitor": "Konkurrenzseite",
+      "competitorPlaceholder": "https://konkurrenz.com",
+      "button": "Seiten vergleichen"
+    },
+    "errors": {
+      "enterUrl": "Bitte geben Sie eine URL ein.",
+      "invalidUrl": "Bitte geben Sie eine gültige URL ein (z. B. https://example.com).",
+      "enterBothUrls": "Bitte geben Sie beide URLs ein.",
+      "invalidBothUrls": "Bitte geben Sie gültige URLs für beide Seiten ein.",
+      "analysisFailed": "Analyse fehlgeschlagen.",
+      "comparisonFailed": "Vergleich fehlgeschlagen.",
+      "unexpected": "Unerwarteter Fehler."
+    }
+  },
+  "LoadingExpert": {
+    "title": "Ihre Seite wird analysiert",
+    "subtitle": "Unser Expertengremium prüft Ihre Landing Page…",
+    "analyzing": "wird analysiert…",
+    "done": "fertig",
+    "waiting": "wartend"
+  },
+  "AnalyzePage": {
+    "back": "← Weitere Seite analysieren",
+    "overallScore": "Gesamtpunktzahl · {count} Experten",
+    "analysedAt": "Analysiert am {date}",
+    "topPriorityActions": "Vorrangige Maßnahmen",
+    "expertAnalyses": "Expertenanalysen",
+    "postHogTrackingPlan": "PostHog Tracking-Plan",
+    "emailSection": {
+      "title": "Bericht per E-Mail senden",
+      "subtitle": "Erhalten Sie eine Kopie dieses Berichts in Ihrem Posteingang.",
+      "placeholder": "sie@example.com",
+      "send": "Senden",
+      "sending": "Wird gesendet…",
+      "sent": "Berichtslink wurde an Ihren Posteingang gesendet",
+      "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
+    "share": {
+      "copied": "Link kopiert!",
+      "button": "Diesen Bericht teilen"
+    }
+  },
+  "ComparePage": {
+    "back": "← Weiteren Vergleich starten",
+    "scoreSummary": "Punktübersicht",
+    "tableHeaders": {
+      "expert": "Experte",
+      "myPage": "Meine Seite",
+      "competitor": "Konkurrenz",
+      "delta": "Delta"
+    },
+    "overall": "Gesamt",
+    "expertAnalysesSideBySide": "Expertenanalysen — Nebeneinander",
+    "myPage": "Meine Seite",
+    "competitor": "Konkurrenz",
+    "share": {
+      "copied": "Link kopiert!",
+      "button": "Diesen Vergleich teilen"
+    }
+  },
+  "ExpertCard": {
+    "topPriorities": "Höchste Prioritäten",
+    "showDetails": "Alle Details anzeigen",
+    "hideDetails": "Details ausblenden",
+    "strengths": "✓ Stärken",
+    "weaknesses": "✗ Schwächen",
+    "allRecommendations": "Alle Empfehlungen",
+    "impact": "Auswirkung: {value}",
+    "tie": "Unentschieden",
+    "priorities": {
+      "high": "hoch",
+      "medium": "mittel",
+      "low": "niedrig"
+    }
+  },
+  "ScoreGauge": {
+    "excellent": "Ausgezeichnet",
+    "good": "Gut",
+    "fair": "Befriedigend",
+    "poor": "Schlecht"
+  },
+  "ComparisonBanner": {
+    "overallComparison": "Gesamtvergleich",
+    "itsATie": "Unentschieden!",
+    "winsOverall": "{hostname} gewinnt insgesamt (+{points} Punkte)",
+    "winner": "Gewinner",
+    "myPage": "Meine Seite",
+    "competitor": "Konkurrenz",
+    "outOf100": "/ 100",
+    "winsCategories": "Gewinnt {wins} von {total} Kategorien"
+  },
+  "PostHogGuide": {
+    "title": "PostHog Tracking-Leitfaden",
+    "subtitle": "{events} Ereignisse · {dashboards} Dashboards · kopierbereit",
+    "keyMetrics": "Wichtige Kennzahlen zum Verfolgen",
+    "tabs": {
+      "events": "Ereignis-Tracking-Plan ({count})",
+      "dashboards": "Empfohlene Dashboards ({count})"
+    },
+    "eventsDescription": "Jedes Ereignis zeigt den empfohlenen PostHog-Analysetyp, die Visualisierung und den Geschäftsnutzen.",
+    "dashboardsDescription": "Erstellen Sie diese Dashboards in PostHog, um die Performance Ihrer Landing Page im Laufe der Zeit zu überwachen.",
+    "noDashboards": "Keine Dashboard-Vorschläge verfügbar.",
+    "businessBenefit": "Geschäftsnutzen",
+    "postHogView": "PostHog-Ansicht",
+    "properties": "Eigenschaften",
+    "copy": "Kopieren",
+    "copied": "Kopiert!"
+  },
+  "SharedReport": {
+    "banner": "Dies ist ein geteilter Bericht.",
+    "analyzeOwn": "Ihre eigene Seite analysieren →",
+    "analyzeYourPage": "Ihre Seite analysieren →",
+    "copyShareLink": "Link zum Teilen kopieren",
+    "linkCopied": "Link kopiert!"
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ScoreGauge } from "./ScoreGauge";
 import type { ExpertAnalysis, Recommendation } from "@/lib/experts/types";
 
@@ -19,6 +20,7 @@ interface ExpertCardProps {
 }
 
 export function ExpertCard({ name, icon, analysis, delta }: ExpertCardProps) {
+  const t = useTranslations("ExpertCard");
   const [expanded, setExpanded] = useState(false);
   const topRecs = analysis.recommendations
     .filter((r) => r.priority === "high")
@@ -51,7 +53,7 @@ export function ExpertCard({ name, icon, analysis, delta }: ExpertCardProps) {
             )}
             {delta === 0 && (
               <span className="flex-shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500">
-                tie
+                {t("tie")}
               </span>
             )}
           </div>
@@ -65,14 +67,14 @@ export function ExpertCard({ name, icon, analysis, delta }: ExpertCardProps) {
       {topRecs.length > 0 && (
         <div className="px-5 pb-4 space-y-2">
           <p className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-            Top priorities
+            {t("topPriorities")}
           </p>
           {topRecs.map((rec, i) => (
             <div key={i} className="flex gap-2 items-start">
               <span
                 className={`flex-shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded border ${PRIORITY_BADGE[rec.priority]}`}
               >
-                {rec.priority}
+                {t(`priorities.${rec.priority}`)}
               </span>
               <p className="text-xs text-gray-700 leading-snug">{rec.action}</p>
             </div>
@@ -85,7 +87,7 @@ export function ExpertCard({ name, icon, analysis, delta }: ExpertCardProps) {
         onClick={() => setExpanded(!expanded)}
         className="w-full px-5 py-3 text-xs text-indigo-600 font-medium bg-indigo-50 hover:bg-indigo-100 transition-colors text-left flex justify-between items-center"
       >
-        <span>{expanded ? "Hide details" : "Show all details"}</span>
+        <span>{expanded ? t("hideDetails") : t("showDetails")}</span>
         <svg
           className={`w-4 h-4 transition-transform ${expanded ? "rotate-180" : ""}`}
           fill="none"
@@ -107,7 +109,7 @@ export function ExpertCard({ name, icon, analysis, delta }: ExpertCardProps) {
           {analysis.strengths.length > 0 && (
             <div>
               <p className="text-xs font-medium text-green-700 mb-2">
-                ✓ Strengths
+                {t("strengths")}
               </p>
               <ul className="space-y-1">
                 {analysis.strengths.map((s, i) => (
@@ -122,7 +124,7 @@ export function ExpertCard({ name, icon, analysis, delta }: ExpertCardProps) {
           {analysis.weaknesses.length > 0 && (
             <div>
               <p className="text-xs font-medium text-red-700 mb-2">
-                ✗ Weaknesses
+                {t("weaknesses")}
               </p>
               <ul className="space-y-1">
                 {analysis.weaknesses.map((w, i) => (
@@ -137,7 +139,7 @@ export function ExpertCard({ name, icon, analysis, delta }: ExpertCardProps) {
           {allRecs.length > 0 && (
             <div>
               <p className="text-xs font-medium text-gray-500 mb-2">
-                All Recommendations
+                {t("allRecommendations")}
               </p>
               <div className="space-y-2">
                 {allRecs.map((rec, i) => (
@@ -146,14 +148,14 @@ export function ExpertCard({ name, icon, analysis, delta }: ExpertCardProps) {
                       <span
                         className={`flex-shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded border ${PRIORITY_BADGE[rec.priority]}`}
                       >
-                        {rec.priority}
+                        {t(`priorities.${rec.priority}`)}
                       </span>
                       <p className="text-xs text-gray-800 font-medium leading-snug">
                         {rec.action}
                       </p>
                     </div>
                     <p className="text-xs text-gray-500 ml-0 mt-1">
-                      Impact: {rec.impact}
+                      {t("impact", { value: rec.impact })}
                     </p>
                   </div>
                 ))}

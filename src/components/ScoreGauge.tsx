@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 interface ScoreGaugeProps {
   score: number;
   size?: "sm" | "md" | "lg";
@@ -12,14 +14,8 @@ function scoreColor(score: number): string {
   return "#ef4444"; // red
 }
 
-function scoreLabel(score: number): string {
-  if (score >= 80) return "Excellent";
-  if (score >= 60) return "Good";
-  if (score >= 40) return "Fair";
-  return "Poor";
-}
-
 export function ScoreGauge({ score, size = "md" }: ScoreGaugeProps) {
+  const t = useTranslations("ScoreGauge");
   const radius = size === "sm" ? 28 : size === "lg" ? 48 : 36;
   const stroke = size === "sm" ? 5 : size === "lg" ? 8 : 6;
   const svgSize = (radius + stroke) * 2;
@@ -28,6 +24,13 @@ export function ScoreGauge({ score, size = "md" }: ScoreGaugeProps) {
   const arcLength = circumference * 0.75;
   const progress = (score / 100) * arcLength;
   const color = scoreColor(score);
+
+  function scoreLabel(s: number): string {
+    if (s >= 80) return t("excellent");
+    if (s >= 60) return t("good");
+    if (s >= 40) return t("fair");
+    return t("poor");
+  }
 
   return (
     <div className="flex flex-col items-center">

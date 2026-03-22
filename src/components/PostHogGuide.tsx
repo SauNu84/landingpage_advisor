@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { PostHogAdvice, TrackingPoint, DashboardSuggestion } from "@/lib/experts/types";
 
 const ANALYSIS_ICONS: Record<string, string> = {
@@ -15,6 +16,7 @@ const ANALYSIS_ICONS: Record<string, string> = {
 };
 
 function CopyButton({ text }: { text: string }) {
+  const t = useTranslations("PostHogGuide");
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
@@ -32,12 +34,13 @@ function CopyButton({ text }: { text: string }) {
       onClick={handleCopy}
       className="absolute top-2 right-2 px-2 py-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-200 rounded transition-colors"
     >
-      {copied ? "Copied!" : "Copy"}
+      {copied ? t("copied") : t("copy")}
     </button>
   );
 }
 
 function TrackingCard({ point }: { point: TrackingPoint }) {
+  const t = useTranslations("PostHogGuide");
   const [open, setOpen] = useState(false);
   const snippet = point.codeSnippet
     .replace(/\\n/g, "\n")
@@ -89,11 +92,11 @@ function TrackingCard({ point }: { point: TrackingPoint }) {
           <div className="px-4 py-3 bg-indigo-50 border-b border-indigo-100 space-y-2">
             <div className="flex flex-wrap gap-3 items-start">
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-indigo-700 mb-0.5">Business benefit</p>
+                <p className="text-xs font-medium text-indigo-700 mb-0.5">{t("businessBenefit")}</p>
                 <p className="text-xs text-indigo-900 leading-snug">{point.benefit}</p>
               </div>
               <div className="flex-shrink-0 text-right">
-                <p className="text-xs font-medium text-indigo-700 mb-0.5">PostHog view</p>
+                <p className="text-xs font-medium text-indigo-700 mb-0.5">{t("postHogView")}</p>
                 <span className="inline-flex items-center gap-1 text-xs text-indigo-800 font-medium">
                   <span>{analysisIcon}</span>
                   <span>{point.visualization}</span>
@@ -105,7 +108,7 @@ function TrackingCard({ point }: { point: TrackingPoint }) {
           {/* Properties */}
           {point.properties && Object.keys(point.properties).length > 0 && (
             <div className="px-4 py-2 bg-gray-50">
-              <p className="text-xs text-gray-500 mb-1">Properties</p>
+              <p className="text-xs text-gray-500 mb-1">{t("properties")}</p>
               <div className="flex flex-wrap gap-1">
                 {Object.entries(point.properties).map(([k, v]) => (
                   <span
@@ -164,6 +167,7 @@ interface PostHogGuideProps {
 }
 
 export function PostHogGuide({ advice }: PostHogGuideProps) {
+  const t = useTranslations("PostHogGuide");
   const [activeTab, setActiveTab] = useState<"events" | "dashboards">("events");
 
   return (
@@ -187,9 +191,12 @@ export function PostHogGuide({ advice }: PostHogGuideProps) {
             </svg>
           </div>
           <div>
-            <h2 className="font-bold text-gray-900">PostHog Tracking Guide</h2>
+            <h2 className="font-bold text-gray-900">{t("title")}</h2>
             <p className="text-xs text-gray-500">
-              {advice.trackingPoints.length} events · {(advice.dashboards ?? []).length} dashboards · copy-paste ready
+              {t("subtitle", {
+                events: advice.trackingPoints.length,
+                dashboards: (advice.dashboards ?? []).length,
+              })}
             </p>
           </div>
         </div>
@@ -202,7 +209,7 @@ export function PostHogGuide({ advice }: PostHogGuideProps) {
       {advice.keyMetrics.length > 0 && (
         <div className="px-6 py-4 bg-orange-50 border-b border-orange-100">
           <p className="text-xs font-medium text-orange-800 mb-2">
-            Key metrics to track
+            {t("keyMetrics")}
           </p>
           <div className="flex flex-wrap gap-2">
             {advice.keyMetrics.map((m) => (
@@ -227,7 +234,7 @@ export function PostHogGuide({ advice }: PostHogGuideProps) {
               : "text-gray-500 hover:text-gray-700"
           }`}
         >
-          Event Tracking Plan ({advice.trackingPoints.length})
+          {t("tabs.events", { count: advice.trackingPoints.length })}
         </button>
         <button
           onClick={() => setActiveTab("dashboards")}
@@ -237,7 +244,7 @@ export function PostHogGuide({ advice }: PostHogGuideProps) {
               : "text-gray-500 hover:text-gray-700"
           }`}
         >
-          Suggested Dashboards ({(advice.dashboards ?? []).length})
+          {t("tabs.dashboards", { count: (advice.dashboards ?? []).length })}
         </button>
       </div>
 
@@ -246,7 +253,7 @@ export function PostHogGuide({ advice }: PostHogGuideProps) {
         {activeTab === "events" && (
           <>
             <p className="text-xs text-gray-400 mb-3">
-              Each event shows the recommended PostHog analysis type, visualization, and business benefit.
+              {t("eventsDescription")}
             </p>
             {advice.trackingPoints.map((point, i) => (
               <TrackingCard key={i} point={point} />
@@ -257,14 +264,14 @@ export function PostHogGuide({ advice }: PostHogGuideProps) {
         {activeTab === "dashboards" && (
           <>
             <p className="text-xs text-gray-400 mb-3">
-              Build these dashboards in PostHog to monitor your landing page performance over time.
+              {t("dashboardsDescription")}
             </p>
             <div className="space-y-3">
               {(advice.dashboards ?? []).map((d, i) => (
                 <DashboardCard key={i} dashboard={d} />
               ))}
               {(advice.dashboards ?? []).length === 0 && (
-                <p className="text-xs text-gray-400 text-center py-6">No dashboard suggestions available.</p>
+                <p className="text-xs text-gray-400 text-center py-6">{t("noDashboards")}</p>
               )}
             </div>
           </>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { AnalysisResult, ExpertName } from "@/lib/experts/types";
 
 interface ComparisonBannerProps {
@@ -28,6 +29,7 @@ export function ComparisonBanner({
   result1,
   result2,
 }: ComparisonBannerProps) {
+  const t = useTranslations("ComparisonBanner");
   const score1 = averageScore(result1);
   const score2 = averageScore(result2);
   const delta = score1 - score2;
@@ -54,26 +56,19 @@ export function ComparisonBanner({
       }`}
     >
       <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">
-        Overall Comparison
+        {t("overallComparison")}
       </p>
 
       {overallWinner === "tie" ? (
         <h2 className="text-xl font-bold text-gray-700 mb-4">
-          It&apos;s a tie!
+          {t("itsATie")}
         </h2>
       ) : (
         <h2 className="text-xl font-bold text-gray-900 mb-4">
-          <span
-            className={
-              overallWinner === "page1" ? "text-green-700" : "text-amber-700"
-            }
-          >
-            {hostname(overallWinner === "page1" ? url1 : url2)}
-          </span>{" "}
-          wins overall{" "}
-          <span className="text-base font-semibold">
-            (+{Math.abs(delta)} pts)
-          </span>
+          {t("winsOverall", {
+            hostname: hostname(overallWinner === "page1" ? url1 : url2),
+            points: Math.abs(delta),
+          })}
         </h2>
       )}
 
@@ -88,19 +83,19 @@ export function ComparisonBanner({
         >
           {overallWinner === "page1" && (
             <span className="inline-block text-xs font-semibold bg-green-600 text-white px-2 py-0.5 rounded-full mb-2">
-              Winner
+              {t("winner")}
             </span>
           )}
-          <p className="text-xs text-gray-500 mb-1 truncate">My Page</p>
+          <p className="text-xs text-gray-500 mb-1 truncate">{t("myPage")}</p>
           <p className="text-sm font-semibold text-gray-800 truncate mb-2">
             {hostname(url1)}
           </p>
           <div className="flex items-end gap-2">
             <span className="text-3xl font-bold text-gray-900">{score1}</span>
-            <span className="text-sm text-gray-400 mb-0.5">/ 100</span>
+            <span className="text-sm text-gray-400 mb-0.5">{t("outOf100")}</span>
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Wins {wins1} of {expertNames.length} categories
+            {t("winsCategories", { wins: wins1, total: expertNames.length })}
           </p>
         </div>
 
@@ -114,19 +109,19 @@ export function ComparisonBanner({
         >
           {overallWinner === "page2" && (
             <span className="inline-block text-xs font-semibold bg-amber-600 text-white px-2 py-0.5 rounded-full mb-2">
-              Winner
+              {t("winner")}
             </span>
           )}
-          <p className="text-xs text-gray-500 mb-1 truncate">Competitor</p>
+          <p className="text-xs text-gray-500 mb-1 truncate">{t("competitor")}</p>
           <p className="text-sm font-semibold text-gray-800 truncate mb-2">
             {hostname(url2)}
           </p>
           <div className="flex items-end gap-2">
             <span className="text-3xl font-bold text-gray-900">{score2}</span>
-            <span className="text-sm text-gray-400 mb-0.5">/ 100</span>
+            <span className="text-sm text-gray-400 mb-0.5">{t("outOf100")}</span>
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Wins {wins2} of {expertNames.length} categories
+            {t("winsCategories", { wins: wins2, total: expertNames.length })}
           </p>
         </div>
       </div>
