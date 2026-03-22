@@ -51,15 +51,22 @@ export async function complete(
     if (!apiKey) throw new Error("OPENAI_API_KEY is not configured");
     const model = process.env.OPENAI_MODEL ?? "gpt-4o";
     const client = new OpenAI({ apiKey });
-    const response = await client.chat.completions.create({
-      model,
-      max_tokens: maxTokens,
-      // JSON mode guarantees raw JSON output — no markdown fences, no prose.
-      // All expert prompts already mention "JSON" which is required by the API.
-      response_format: { type: "json_object" },
-      messages: [{ role: "user", content: prompt }],
-    });
-    return response.choices[0]?.message?.content ?? "";
+    try {
+      const response = await client.chat.completions.create({
+        model,
+        max_tokens: maxTokens,
+        // JSON mode guarantees raw JSON output — no markdown fences, no prose.
+        // All expert prompts already mention "JSON" which is required by the API.
+        response_format: { type: "json_object" },
+        messages: [{ role: "user", content: prompt }],
+      });
+      return response.choices[0]?.message?.content ?? "";
+    } catch (err) {
+      if (err instanceof OpenAI.AuthenticationError) {
+        throw new Error("AI service is temporarily unavailable. Please try again later.");
+      }
+      throw err;
+    }
   }
 
   // Default: Claude
@@ -67,10 +74,17 @@ export async function complete(
   if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured");
   const model = process.env.CLAUDE_MODEL ?? "claude-sonnet-4-6";
   const client = new Anthropic({ apiKey });
-  const message = await client.messages.create({
-    model,
-    max_tokens: maxTokens,
-    messages: [{ role: "user", content: prompt }],
-  });
-  return message.content[0].type === "text" ? message.content[0].text : "";
+  try {
+    const message = await client.messages.create({
+      model,
+      max_tokens: maxTokens,
+      messages: [{ role: "user", content: prompt }],
+    });
+    return message.content[0].type === "text" ? message.content[0].text : "";
+  } catch (err) {
+    if (err instanceof Anthropic.AuthenticationError) {
+      throw new Error("AI service is temporarily unavailable. Please try again later.");
+    }
+    throw err;
+  }
 }
