@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import { getSessionFromRequest } from "@/lib/session";
 import { checkAnalysisRateLimit, getClientIp } from "@/lib/rate-limit";
 import type { AnalysisResult } from "@/lib/experts/types";
+import { logger } from "@/lib/logger";
 
 export interface ComparisonResult {
   url1: string;
@@ -102,7 +103,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(comparison);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Comparison failed";
-    console.error("[compare] error:", err);
+    logger.error("compare", "unhandled error", err);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

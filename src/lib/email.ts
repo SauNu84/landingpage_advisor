@@ -1,9 +1,11 @@
+import { logger } from "@/lib/logger";
+
 export async function sendOtpEmail(to: string, otp: string): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
 
   if (!apiKey) {
     // Dev mode: log to console
-    console.log(`[OTP] ---- Sign-in code for ${to}: ${otp} ----`);
+    logger.info("otp", "sign-in code generated (dev mode)", { to, otp });
     return;
   }
 

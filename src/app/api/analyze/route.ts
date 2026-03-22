@@ -15,6 +15,7 @@ import { checkAnalysisRateLimit, getClientIp } from "@/lib/rate-limit";
 import { decrypt } from "@/lib/encrypt";
 import { getProjectEvents } from "@/lib/posthog-client";
 import { parseJsonResponse } from "@/lib/parse-json-response";
+import { logger } from "@/lib/logger";
 import type {
   ExpertName,
   ExpertAnalysis,
@@ -82,7 +83,7 @@ async function buildLiveData(
       connectedAt: new Date().toISOString(),
     };
   } catch (err) {
-    console.error("[analyze] live PostHog enrichment failed:", err);
+    logger.error("analyze", "live PostHog enrichment failed", err);
     return null;
   }
 }
@@ -190,7 +191,7 @@ export async function POST(request: NextRequest) {
           );
           if (liveData) result.liveData = liveData;
         } catch (err) {
-          console.error("[analyze] PostHog config decrypt error:", err);
+          logger.error("analyze", "PostHog config decrypt error", err);
         }
       }
     }
@@ -210,7 +211,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ...result, slug });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Analysis failed";
-    console.error("[analyze] error:", err);
+    logger.error("analyze", "unhandled error", err);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

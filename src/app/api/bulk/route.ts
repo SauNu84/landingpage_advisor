@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import { getSessionFromRequest } from "@/lib/session";
 import { checkAnalysisRateLimit, getClientIp } from "@/lib/rate-limit";
 import type { BulkAnalysisResult } from "@/lib/experts/types";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: NextRequest) {
   let urls: string[];
@@ -97,7 +98,7 @@ export async function POST(request: NextRequest) {
         successUrls.push(urls[i]);
         results.push(r.value);
       } else {
-        console.error(`[bulk] failed to analyze ${urls[i]}:`, r.reason);
+        logger.error("bulk", "failed to analyze URL", r.reason, { url: urls[i] });
       }
     });
 
@@ -130,7 +131,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(bulkResult);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Bulk analysis failed";
-    console.error("[bulk] error:", err);
+    logger.error("bulk", "unhandled error", err);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
