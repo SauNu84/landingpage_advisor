@@ -43,7 +43,8 @@
     },
     "modeToggle": {
       "single": "Einzelne URL",
-      "compare": "Seiten vergleichen"
+      "compare": "Seiten vergleichen",
+      "bulk": "Bulk-Analyse"
     },
     "singleForm": {
       "label": "Landing Page URL",
@@ -57,6 +58,14 @@
       "competitorPlaceholder": "https://konkurrenz.com",
       "button": "Seiten vergleichen"
     },
+    "bulkForm": {
+      "label": "Zu analysierende URLs (eine pro Zeile, 3–10)",
+      "placeholder": "https://beispiel1.com\nhttps://beispiel2.com\nhttps://beispiel3.com",
+      "button": "Alle Seiten analysieren",
+      "urlCount": "{count} URLs",
+      "hint": "Geben Sie 3–10 URLs ein, eine pro Zeile. Duplikate werden automatisch entfernt.",
+      "analyzingUrl": "Analysiere {n} von {total}"
+    },
     "errors": {
       "enterUrl": "Bitte geben Sie eine URL ein.",
       "invalidUrl": "Bitte geben Sie eine gültige URL ein (z. B. https://example.com).",
@@ -64,6 +73,10 @@
       "invalidBothUrls": "Bitte geben Sie gültige URLs für beide Seiten ein.",
       "analysisFailed": "Analyse fehlgeschlagen.",
       "comparisonFailed": "Vergleich fehlgeschlagen.",
+      "bulkMinUrls": "Bitte geben Sie mindestens 3 URLs ein.",
+      "bulkMaxUrls": "Bitte geben Sie nicht mehr als 10 URLs ein.",
+      "bulkInvalidUrl": "Ungültige URL: {url}",
+      "bulkFailed": "Bulk-Analyse fehlgeschlagen.",
       "unexpected": "Unerwarteter Fehler."
     }
   },
@@ -196,6 +209,26 @@
     "signInRequired": "Anmelden um Verlauf anzuzeigen",
     "signInRequiredDesc": "Erstellen Sie ein kostenloses Konto, um Ihre vergangenen Analysen zu speichern und erneut aufzurufen.",
     "goHome": "Zur Startseite"
+  },
+  "BulkPage": {
+    "back": "← Weitere Batch-Analyse starten",
+    "winner": "Gewinner",
+    "pagesAnalyzed": "Seiten analysiert",
+    "outOf100": "/ 100",
+    "analysedAt": "Analysiert am {date}",
+    "rankingTable": "Rangliste",
+    "tableHeaders": {
+      "rank": "#",
+      "url": "URL",
+      "overall": "Gesamt",
+      "details": "Details"
+    },
+    "viewDetails": "Details anzeigen",
+    "hideDetails": "Details ausblenden",
+    "share": {
+      "copied": "Link kopiert!",
+      "button": "Diesen Bulk-Bericht teilen"
+    }
   },
   "SharedReport": {
     "banner": "Dies ist ein geteilter Bericht.",

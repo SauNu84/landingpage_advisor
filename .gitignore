@@ -32,3 +32,4 @@ next-env.d.ts
 # Database (dev only, don't commit binary)
 prisma/prisma/dev.db
 prisma/prisma/dev.db-journal
+node_modules

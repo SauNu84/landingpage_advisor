@@ -85,3 +85,11 @@ export interface AnalysisResult {
   experts: Record<ExpertName, ExpertAnalysis>;
   posthog: PostHogAdvice;
 }
+
+export interface BulkAnalysisResult {
+  type: "bulk";
+  urls: string[];
+  results: AnalysisResult[];
+  analysedAt: string;
+  slug: string;
+}

@@ -43,7 +43,8 @@
     },
     "modeToggle": {
       "single": "Một URL",
-      "compare": "So sánh trang"
+      "compare": "So sánh trang",
+      "bulk": "Phân tích hàng loạt"
     },
     "singleForm": {
       "label": "URL trang đích",
@@ -57,6 +58,14 @@
       "competitorPlaceholder": "https://doi-thu.com",
       "button": "So sánh trang"
     },
+    "bulkForm": {
+      "label": "URLs cần phân tích (mỗi dòng một URL, 3–10)",
+      "placeholder": "https://vi-du1.com\nhttps://vi-du2.com\nhttps://vi-du3.com",
+      "button": "Phân tích tất cả trang",
+      "urlCount": "{count} URLs",
+      "hint": "Nhập 3–10 URL, mỗi URL một dòng. URL trùng lặp sẽ tự động bị xóa.",
+      "analyzingUrl": "Đang phân tích {n} trong {total}"
+    },
     "errors": {
       "enterUrl": "Vui lòng nhập URL.",
       "invalidUrl": "Vui lòng nhập URL hợp lệ (ví dụ: https://example.com).",
@@ -64,6 +73,10 @@
       "invalidBothUrls": "Vui lòng nhập URL hợp lệ cho cả hai trang.",
       "analysisFailed": "Phân tích thất bại.",
       "comparisonFailed": "So sánh thất bại.",
+      "bulkMinUrls": "Vui lòng nhập ít nhất 3 URL.",
+      "bulkMaxUrls": "Vui lòng nhập không quá 10 URL.",
+      "bulkInvalidUrl": "URL không hợp lệ: {url}",
+      "bulkFailed": "Phân tích hàng loạt thất bại.",
       "unexpected": "Lỗi không mong đợi."
     }
   },
@@ -196,6 +209,26 @@
     "signInRequired": "Đăng nhập để xem lịch sử",
     "signInRequiredDesc": "Tạo tài khoản miễn phí để lưu và xem lại các phân tích trước đây.",
     "goHome": "Về trang chủ"
+  },
+  "BulkPage": {
+    "back": "← Phân tích loạt khác",
+    "winner": "Người thắng",
+    "pagesAnalyzed": "trang đã phân tích",
+    "outOf100": "/ 100",
+    "analysedAt": "Đã phân tích {date}",
+    "rankingTable": "Xếp hạng",
+    "tableHeaders": {
+      "rank": "#",
+      "url": "URL",
+      "overall": "Tổng",
+      "details": "Chi tiết"
+    },
+    "viewDetails": "Xem chi tiết",
+    "hideDetails": "Ẩn chi tiết",
+    "share": {
+      "copied": "Đã sao chép liên kết!",
+      "button": "Chia sẻ báo cáo hàng loạt này"
+    }
   },
   "SharedReport": {
     "banner": "Đây là báo cáo được chia sẻ.",

@@ -43,7 +43,8 @@
     },
     "modeToggle": {
       "single": "Single URL",
-      "compare": "Compare Pages"
+      "compare": "Compare Pages",
+      "bulk": "Bulk Analysis"
     },
     "singleForm": {
       "label": "Landing page URL",
@@ -57,6 +58,14 @@
       "competitorPlaceholder": "https://competitor.com",
       "button": "Compare Pages"
     },
+    "bulkForm": {
+      "label": "URLs to analyze (one per line, 3–10)",
+      "placeholder": "https://example1.com\nhttps://example2.com\nhttps://example3.com",
+      "button": "Analyze All Pages",
+      "urlCount": "{count} URLs",
+      "hint": "Enter 3–10 URLs, one per line. Duplicates are removed automatically.",
+      "analyzingUrl": "Analyzing {n} of {total}"
+    },
     "errors": {
       "enterUrl": "Please enter a URL.",
       "invalidUrl": "Please enter a valid URL (e.g. https://example.com).",
@@ -64,6 +73,10 @@
       "invalidBothUrls": "Please enter valid URLs for both pages.",
       "analysisFailed": "Analysis failed.",
       "comparisonFailed": "Comparison failed.",
+      "bulkMinUrls": "Please enter at least 3 URLs.",
+      "bulkMaxUrls": "Please enter no more than 10 URLs.",
+      "bulkInvalidUrl": "Invalid URL: {url}",
+      "bulkFailed": "Bulk analysis failed.",
       "unexpected": "Unexpected error."
     }
   },
@@ -196,6 +209,26 @@
     "signInRequired": "Sign in to view history",
     "signInRequiredDesc": "Create a free account to save and revisit your past analyses.",
     "goHome": "Go to home page"
+  },
+  "BulkPage": {
+    "back": "← Analyze another batch",
+    "winner": "Winner",
+    "pagesAnalyzed": "pages analyzed",
+    "outOf100": "/ 100",
+    "analysedAt": "Analysed {date}",
+    "rankingTable": "Rankings",
+    "tableHeaders": {
+      "rank": "#",
+      "url": "URL",
+      "overall": "Overall",
+      "details": "Details"
+    },
+    "viewDetails": "View details",
+    "hideDetails": "Hide details",
+    "share": {
+      "copied": "Link copied!",
+      "button": "Share this bulk report"
+    }
   },
   "SharedReport": {
     "banner": "This is a shared report.",

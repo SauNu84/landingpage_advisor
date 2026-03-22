@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { SharedReportView } from "@/components/SharedReportView";
-import type { AnalysisResult } from "@/lib/experts/types";
+import { BulkReportView } from "@/components/BulkReportView";
+import type { AnalysisResult, BulkAnalysisResult } from "@/lib/experts/types";
 
 interface Props {
   params: { locale: string; slug: string };
@@ -14,7 +15,17 @@ export default async function SharedReportPage({ params }: Props) {
 
   if (!record) notFound();
 
-  const result: AnalysisResult = JSON.parse(record.data);
+  const data = JSON.parse(record.data) as AnalysisResult | BulkAnalysisResult;
 
-  return <SharedReportView result={result} slug={params.slug} />;
+  if ("type" in data && data.type === "bulk") {
+    return (
+      <BulkReportView
+        result={data as BulkAnalysisResult}
+        slug={params.slug}
+        shared
+      />
+    );
+  }
+
+  return <SharedReportView result={data as AnalysisResult} slug={params.slug} />;
 }
