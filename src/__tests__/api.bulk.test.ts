@@ -15,7 +15,7 @@ jest.mock("@/lib/session", () => ({
 }));
 jest.mock("@/lib/rate-limit", () => ({
   checkAnalysisRateLimit: jest.fn(() =>
-    Promise.resolve({ allowed: true, limit: 3, remaining: 2 })
+    Promise.resolve({ allowed: true, limit: 10, remaining: 9 })
   ),
   getClientIp: jest.fn(() => "127.0.0.1"),
 }));
@@ -136,7 +136,7 @@ describe("POST /api/bulk — URL format validation", () => {
 
 describe("POST /api/bulk — rate limiting", () => {
   it("returns 429 when rate limit exceeded", async () => {
-    mockRateLimit.mockResolvedValueOnce({ allowed: false, limit: 3, remaining: 0 });
+    mockRateLimit.mockResolvedValueOnce({ allowed: false, limit: 10, remaining: 0 });
     const res = await POST(makeReq({
       urls: ["https://a.com", "https://b.com", "https://c.com"],
     }));

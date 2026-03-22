@@ -63,8 +63,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: session
-          ? "Daily analysis limit reached (20/day). Please try again tomorrow."
-          : "Daily analysis limit reached (3/day). Sign in for more analyses.",
+          ? `Daily analysis limit reached (${rateLimit.limit}/day). Please try again tomorrow.`
+          : `Daily analysis limit reached (${rateLimit.limit}/day). Sign in for more analyses.`,
         rateLimitExceeded: true,
       },
       { status: 429 }

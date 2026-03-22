@@ -1,7 +1,7 @@
 import { prisma } from "./db";
 
-const ANON_DAILY_LIMIT = 3;
-const AUTH_DAILY_LIMIT = 20;
+const ANON_DAILY_LIMIT = parseInt(process.env.ANON_DAILY_LIMIT ?? "10", 10);
+const AUTH_DAILY_LIMIT = parseInt(process.env.AUTH_DAILY_LIMIT ?? "20", 10);
 const WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export interface RateLimitResult {

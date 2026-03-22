@@ -28,30 +28,30 @@ beforeEach(() => {
 describe("checkAnalysisRateLimit — anonymous user", () => {
   const ip = "1.2.3.4";
 
-  it("allows when count is 0 (limit=3)", async () => {
+  it("allows when count is 0 (limit=10)", async () => {
     mockCount.mockResolvedValue(0);
     const result = await checkAnalysisRateLimit(null, ip);
     expect(result.allowed).toBe(true);
-    expect(result.limit).toBe(3);
-    expect(result.remaining).toBe(3);
+    expect(result.limit).toBe(10);
+    expect(result.remaining).toBe(10);
   });
 
-  it("allows at count=2 (one under limit)", async () => {
-    mockCount.mockResolvedValue(2);
+  it("allows at count=9 (one under limit)", async () => {
+    mockCount.mockResolvedValue(9);
     const result = await checkAnalysisRateLimit(null, ip);
     expect(result.allowed).toBe(true);
     expect(result.remaining).toBe(1);
   });
 
-  it("blocks at count=3 (at limit)", async () => {
-    mockCount.mockResolvedValue(3);
+  it("blocks at count=10 (at limit)", async () => {
+    mockCount.mockResolvedValue(10);
     const result = await checkAnalysisRateLimit(null, ip);
     expect(result.allowed).toBe(false);
     expect(result.remaining).toBe(0);
   });
 
-  it("blocks above limit (count=10)", async () => {
-    mockCount.mockResolvedValue(10);
+  it("blocks above limit (count=15)", async () => {
+    mockCount.mockResolvedValue(15);
     const result = await checkAnalysisRateLimit(null, ip);
     expect(result.allowed).toBe(false);
     expect(result.remaining).toBe(0);
