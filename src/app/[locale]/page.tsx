@@ -5,6 +5,7 @@ import { useRouter } from "@/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { LoadingExpert } from "@/components/LoadingExpert";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { UserNav } from "@/components/UserNav";
 
 type Mode = "single" | "compare";
 
@@ -13,6 +14,7 @@ export default function HomePage() {
   const locale = useLocale();
   const t = useTranslations("HomePage");
   const tCommon = useTranslations("Common");
+  const tAuth = useTranslations("Auth");
 
   const [mode, setMode] = useState<Mode>("single");
   const [url, setUrl] = useState("");
@@ -180,7 +182,31 @@ export default function HomePage() {
       <div className="w-full max-w-xl">
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="flex justify-end mb-2">
+          <div className="flex justify-end items-center gap-2 mb-2">
+            <UserNav
+              translations={{
+                signIn: tAuth("signIn"),
+                signOut: tAuth("signOut"),
+                history: tAuth("history"),
+                modal: {
+                  title: tAuth("modal.title"),
+                  emailLabel: tAuth("modal.emailLabel"),
+                  emailPlaceholder: tAuth("modal.emailPlaceholder"),
+                  sendCode: tAuth("modal.sendCode"),
+                  sending: tAuth("modal.sending"),
+                  codeLabel: tAuth("modal.codeLabel"),
+                  codePlaceholder: tAuth("modal.codePlaceholder"),
+                  verify: tAuth("modal.verify"),
+                  verifying: tAuth("modal.verifying"),
+                  back: tAuth("modal.back"),
+                  close: tAuth("modal.close"),
+                  emailSent: tAuth("modal.emailSent"),
+                  invalidEmail: tAuth("modal.invalidEmail"),
+                  invalidCode: tAuth("modal.invalidCode"),
+                  errorGeneric: tAuth("modal.errorGeneric"),
+                },
+              }}
+            />
             <LanguageSwitcher />
           </div>
           <div className="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl mb-4">

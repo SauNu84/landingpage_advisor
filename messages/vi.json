@@ -161,6 +161,42 @@
     "copy": "Sao chép",
     "copied": "Đã sao chép!"
   },
+  "Auth": {
+    "signIn": "Đăng nhập",
+    "signOut": "Đăng xuất",
+    "history": "Phân tích của tôi",
+    "modal": {
+      "title": "Đăng nhập vào Landing Page Advisor",
+      "emailLabel": "Địa chỉ email",
+      "emailPlaceholder": "ban@example.com",
+      "sendCode": "Gửi mã",
+      "sending": "Đang gửi…",
+      "codeLabel": "Mã 6 chữ số",
+      "codePlaceholder": "000000",
+      "verify": "Xác nhận",
+      "verifying": "Đang xác nhận…",
+      "back": "← Dùng email khác",
+      "close": "Đóng",
+      "emailSent": "Chúng tôi đã gửi mã đến",
+      "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ.",
+      "invalidCode": "Vui lòng nhập mã 6 chữ số.",
+      "errorGeneric": "Đã xảy ra lỗi. Vui lòng thử lại."
+    }
+  },
+  "History": {
+    "title": "Phân tích của tôi",
+    "subtitle": "Tất cả các phân tích trang đích trong quá khứ của bạn",
+    "loading": "Đang tải…",
+    "analyzeNew": "← Phân tích trang mới",
+    "empty": "Chưa có phân tích nào",
+    "emptyDesc": "Hãy phân tích một trang đích để xem tại đây.",
+    "loadMore": "Tải thêm",
+    "loadingMore": "Đang tải…",
+    "comparison": "So sánh",
+    "signInRequired": "Đăng nhập để xem lịch sử",
+    "signInRequiredDesc": "Tạo tài khoản miễn phí để lưu và xem lại các phân tích trước đây.",
+    "goHome": "Về trang chủ"
+  },
   "SharedReport": {
     "banner": "Đây là báo cáo được chia sẻ.",
     "analyzeOwn": "Phân tích trang của bạn →",

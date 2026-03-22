@@ -10,6 +10,8 @@ import { buildPsychologyPrompt } from "@/lib/experts/psychology";
 import { buildPostHogAdvisorPrompt } from "@/lib/posthog-advisor";
 import { prisma } from "@/lib/db";
 import { nanoid } from "nanoid";
+import { getSessionFromRequest } from "@/lib/session";
+import { checkAnalysisRateLimit, getClientIp } from "@/lib/rate-limit";
 import type {
   ExpertName,
   ExpertAnalysis,
@@ -113,6 +115,23 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Rate limiting — a comparison counts as 1 analysis
+  const session = await getSessionFromRequest(request);
+  const ip = getClientIp(request);
+  const rateLimit = await checkAnalysisRateLimit(session?.userId ?? null, ip);
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      {
+        error: session
+          ? "Daily analysis limit reached (20/day). Please try again tomorrow."
+          : "Daily analysis limit reached (3/day). Sign in for more analyses.",
+        rateLimitExceeded: true,
+      },
+      { status: 429 }
+    );
+  }
+
   try {
     // Run both full pipelines in parallel
     const [result1, result2] = await Promise.all([
@@ -128,6 +147,8 @@ export async function POST(request: NextRequest) {
         data: JSON.stringify(result1),
         secondaryUrl: url2,
         secondaryData: JSON.stringify(result2),
+        userId: session?.userId ?? null,
+        ip,
       },
     });
 

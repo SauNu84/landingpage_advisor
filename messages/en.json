@@ -161,6 +161,42 @@
     "copy": "Copy",
     "copied": "Copied!"
   },
+  "Auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "history": "My analyses",
+    "modal": {
+      "title": "Sign in to Landing Page Advisor",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "you@example.com",
+      "sendCode": "Send code",
+      "sending": "Sending…",
+      "codeLabel": "6-digit code",
+      "codePlaceholder": "000000",
+      "verify": "Verify",
+      "verifying": "Verifying…",
+      "back": "← Use a different email",
+      "close": "Close",
+      "emailSent": "We sent a code to",
+      "invalidEmail": "Please enter a valid email address.",
+      "invalidCode": "Please enter the 6-digit code.",
+      "errorGeneric": "Something went wrong. Please try again."
+    }
+  },
+  "History": {
+    "title": "My analyses",
+    "subtitle": "All your past landing page analyses",
+    "loading": "Loading…",
+    "analyzeNew": "← Analyze a new page",
+    "empty": "No analyses yet",
+    "emptyDesc": "Analyze a landing page to see it here.",
+    "loadMore": "Load more",
+    "loadingMore": "Loading…",
+    "comparison": "Comparison",
+    "signInRequired": "Sign in to view history",
+    "signInRequiredDesc": "Create a free account to save and revisit your past analyses.",
+    "goHome": "Go to home page"
+  },
   "SharedReport": {
     "banner": "This is a shared report.",
     "analyzeOwn": "Analyze your own page →",

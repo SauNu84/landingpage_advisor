@@ -161,6 +161,42 @@
     "copy": "Kopieren",
     "copied": "Kopiert!"
   },
+  "Auth": {
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "history": "Meine Analysen",
+    "modal": {
+      "title": "Bei Landing Page Advisor anmelden",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "sie@example.com",
+      "sendCode": "Code senden",
+      "sending": "Wird gesendet…",
+      "codeLabel": "6-stelliger Code",
+      "codePlaceholder": "000000",
+      "verify": "Bestätigen",
+      "verifying": "Wird bestätigt…",
+      "back": "← Andere E-Mail verwenden",
+      "close": "Schließen",
+      "emailSent": "Wir haben einen Code gesendet an",
+      "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+      "invalidCode": "Bitte geben Sie den 6-stelligen Code ein.",
+      "errorGeneric": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    }
+  },
+  "History": {
+    "title": "Meine Analysen",
+    "subtitle": "Alle Ihre vergangenen Landing-Page-Analysen",
+    "loading": "Wird geladen…",
+    "analyzeNew": "← Neue Seite analysieren",
+    "empty": "Noch keine Analysen",
+    "emptyDesc": "Analysieren Sie eine Landing Page, um sie hier zu sehen.",
+    "loadMore": "Mehr laden",
+    "loadingMore": "Wird geladen…",
+    "comparison": "Vergleich",
+    "signInRequired": "Anmelden um Verlauf anzuzeigen",
+    "signInRequiredDesc": "Erstellen Sie ein kostenloses Konto, um Ihre vergangenen Analysen zu speichern und erneut aufzurufen.",
+    "goHome": "Zur Startseite"
+  },
   "SharedReport": {
     "banner": "Dies ist ein geteilter Bericht.",
     "analyzeOwn": "Ihre eigene Seite analysieren →",

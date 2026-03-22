@@ -10,6 +10,8 @@ import { buildPsychologyPrompt } from "@/lib/experts/psychology";
 import { buildPostHogAdvisorPrompt } from "@/lib/posthog-advisor";
 import { prisma } from "@/lib/db";
 import { nanoid } from "nanoid";
+import { getSessionFromRequest } from "@/lib/session";
+import { checkAnalysisRateLimit, getClientIp } from "@/lib/rate-limit";
 import type {
   ExpertName,
   ExpertAnalysis,
@@ -72,6 +74,23 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Rate limiting
+  const session = await getSessionFromRequest(request);
+  const ip = getClientIp(request);
+  const rateLimit = await checkAnalysisRateLimit(session?.userId ?? null, ip);
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      {
+        error: session
+          ? "Daily analysis limit reached (20/day). Please try again tomorrow."
+          : "Daily analysis limit reached (3/day). Sign in for more analyses.",
+        rateLimitExceeded: true,
+      },
+      { status: 429 }
+    );
+  }
+
   try {
     // Step 1: Scrape the page
     const page = await scrapePage(url);
@@ -109,7 +128,13 @@ export async function POST(request: NextRequest) {
     // Persist result and generate shareable slug
     const slug = nanoid(8);
     await prisma.analysisResult.create({
-      data: { slug, url, data: JSON.stringify(result) },
+      data: {
+        slug,
+        url,
+        data: JSON.stringify(result),
+        userId: session?.userId ?? null,
+        ip,
+      },
     });
 
     return NextResponse.json({ ...result, slug });
