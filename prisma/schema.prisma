@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model AnalysisResult {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  url           String
+  data          String
+  secondaryUrl  String?
+  secondaryData String?
+  createdAt     DateTime @default(now())
+}
+
+model EmailCapture {
+  id        String   @id @default(cuid())
+  slug      String
+  email     String
+  createdAt DateTime @default(now())
+}
