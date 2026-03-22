@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ExpertCard } from "@/components/ExpertCard";
 import { PostHogGuide } from "@/components/PostHogGuide";
 import { ScoreGauge } from "@/components/ScoreGauge";
+import { DownloadPDFButton } from "@/components/DownloadPDFButton";
 import type { AnalysisResult, ExpertName } from "@/lib/experts/types";
 
 interface StoredResult extends AnalysisResult {
@@ -119,12 +120,15 @@ export default function AnalyzePage() {
               Landing Page Advisor
             </span>
           </div>
-          <button
-            onClick={() => router.push("/")}
-            className="text-sm text-indigo-600 font-medium hover:underline"
-          >
-            ← Analyze another
-          </button>
+          <div className="flex items-center gap-3">
+            <DownloadPDFButton result={result} slug={result.slug} />
+            <button
+              onClick={() => router.push("/")}
+              className="text-sm text-indigo-600 font-medium hover:underline"
+            >
+              ← Analyze another
+            </button>
+          </div>
         </div>
       </header>
 

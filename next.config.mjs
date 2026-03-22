@@ -6,6 +6,7 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["cheerio"],
   },
+  transpilePackages: ["@react-pdf/renderer"],
 };
 
 export default withNextIntl(nextConfig);

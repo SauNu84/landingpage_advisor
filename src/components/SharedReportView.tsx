@@ -7,6 +7,7 @@ import { ExpertCard } from "@/components/ExpertCard";
 import { PostHogGuide } from "@/components/PostHogGuide";
 import { ScoreGauge } from "@/components/ScoreGauge";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { DownloadPDFButton } from "@/components/DownloadPDFButton";
 import type { AnalysisResult, ExpertName } from "@/lib/experts/types";
 
 const EXPERT_META_ICONS: Record<ExpertName, string> = {
@@ -105,6 +106,7 @@ export function SharedReportView({ result, slug }: Props) {
             <span className="font-semibold text-gray-900 text-sm">{tCommon("appName")}</span>
           </div>
           <div className="flex items-center gap-3">
+            <DownloadPDFButton result={result} slug={slug} />
             <LanguageSwitcher />
             <Link href="/" className="text-sm text-indigo-600 font-medium hover:underline">
               {t("analyzeYourPage")}
