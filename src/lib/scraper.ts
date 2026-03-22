@@ -1,7 +1,36 @@
 import * as cheerio from "cheerio";
 import type { PageData, DomElement } from "./experts/types";
 
+function isPrivateHost(hostname: string): boolean {
+  // Strip IPv6 brackets
+  const h = hostname.replace(/^\[|\]$/g, "").toLowerCase();
+
+  // Localhost / loopback
+  if (h === "localhost" || h === "::1" || /^127\./.test(h)) return true;
+
+  // Link-local and AWS metadata
+  if (/^169\.254\./.test(h) || /^fe80:/i.test(h)) return true;
+
+  // Private RFC-1918 ranges
+  if (/^10\./.test(h)) return true;
+  if (/^172\.(1[6-9]|2[0-9]|3[01])\./.test(h)) return true;
+  if (/^192\.168\./.test(h)) return true;
+
+  // Unspecified / any
+  if (h === "0.0.0.0" || h === "::") return true;
+
+  return false;
+}
+
 export async function scrapePage(url: string): Promise<PageData> {
+  const parsed = new URL(url);
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    throw new Error(`Unsupported protocol: ${parsed.protocol}`);
+  }
+  if (isPrivateHost(parsed.hostname)) {
+    throw new Error(`Requests to private/internal hosts are not allowed`);
+  }
+
   const response = await fetch(url, {
     headers: {
       "User-Agent":

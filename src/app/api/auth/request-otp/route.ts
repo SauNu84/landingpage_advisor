@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendOtpEmail } from "@/lib/email";
@@ -5,7 +6,8 @@ import { sendOtpEmail } from "@/lib/email";
 const OTP_EXPIRY_MINUTES = 15;
 
 function generateOtp(): string {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  // Use CSPRNG — Math.random() is not suitable for security tokens
+  return randomInt(100000, 1000000).toString();
 }
 
 export async function POST(request: NextRequest) {

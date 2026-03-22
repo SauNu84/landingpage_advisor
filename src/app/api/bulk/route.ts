@@ -87,13 +87,31 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Run all analyses in parallel
-    const results = await Promise.all(urls.map((url) => analyzePage(url)));
+    // Run all analyses in parallel; use allSettled so one failure doesn't abort the batch
+    const settled = await Promise.allSettled(urls.map((url) => analyzePage(url)));
+
+    const successUrls: string[] = [];
+    const results: BulkAnalysisResult["results"] = [];
+    settled.forEach((r, i) => {
+      if (r.status === "fulfilled") {
+        successUrls.push(urls[i]);
+        results.push(r.value);
+      } else {
+        console.error(`[bulk] failed to analyze ${urls[i]}:`, r.reason);
+      }
+    });
+
+    if (results.length === 0) {
+      return NextResponse.json(
+        { error: "All URL analyses failed. Please check the URLs and try again." },
+        { status: 502 }
+      );
+    }
 
     const slug = nanoid(8);
     const bulkResult: BulkAnalysisResult = {
       type: "bulk",
-      urls,
+      urls: successUrls,
       results,
       analysedAt: new Date().toISOString(),
       slug,
