@@ -163,7 +163,8 @@
     "keyMetrics": "Key metrics to track",
     "tabs": {
       "events": "Event Tracking Plan ({count})",
-      "dashboards": "Suggested Dashboards ({count})"
+      "dashboards": "Suggested Dashboards ({count})",
+      "liveData": "Live Data"
     },
     "eventsDescription": "Each event shows the recommended PostHog analysis type, visualization, and business benefit.",
     "dashboardsDescription": "Build these dashboards in PostHog to monitor your landing page performance over time.",
@@ -172,12 +173,62 @@
     "postHogView": "PostHog view",
     "properties": "Properties",
     "copy": "Copy",
-    "copied": "Copied!"
+    "copied": "Copied!",
+    "liveData": {
+      "badge": "Live PostHog",
+      "tracked": "Already tracking",
+      "lowVolume": "Low volume",
+      "notTracked": "Not tracked",
+      "recommendedEvents": "Recommended events — live status",
+      "topEvents": "Top events from your PostHog (last 30 days)",
+      "events30d": "events/30d",
+      "refreshedAt": "Data fetched {date}",
+      "status": {
+        "tracked": "Already tracking",
+        "low_volume": "Tracking, low volume",
+        "not_tracked": "Not yet tracked"
+      }
+    }
+  },
+  "PostHogSettings": {
+    "back": "← Back to home",
+    "title": "PostHog Integration",
+    "subtitle": "Connect your PostHog project to see live tracking data alongside AI recommendations.",
+    "connectedStatus": "Connected to PostHog",
+    "projectId": "Project ID",
+    "apiKey": "API Key",
+    "host": "Host",
+    "disconnect": "Disconnect",
+    "disconnectConfirm": "Are you sure you want to disconnect PostHog? Live data will no longer appear in analyses.",
+    "updateConnection": "Update connection",
+    "connectTitle": "Connect your PostHog project",
+    "connectDescription": "Enter your PostHog Personal API Key and Project ID. Your key is encrypted and stored securely.",
+    "apiKeyLabel": "Personal API Key",
+    "apiKeyPlaceholderUpdate": "Enter new key to update",
+    "apiKeyHint": "Found in PostHog → Settings → Personal API Keys. Needs project:read scope.",
+    "projectIdLabel": "Project ID",
+    "projectIdHint": "Found in PostHog → Project Settings → Project ID.",
+    "hostLabel": "PostHog Host",
+    "hostHint": "Change this if you self-host PostHog.",
+    "testButton": "Test connection",
+    "testing": "Testing…",
+    "testSuccess": "Connected! Project: {name}",
+    "saveButton": "Save",
+    "saving": "Saving…",
+    "savedSuccess": "Settings saved. Future analyses will include live PostHog data.",
+    "infoTitle": "What data is fetched?",
+    "infoBody": "Only event names and volumes are fetched from your PostHog project — no user data, session recordings, or PII. Data is used only to annotate analysis results.",
+    "errors": {
+      "apiKeyAndProjectRequired": "Please enter both API Key and Project ID.",
+      "testFailed": "Connection test failed. Check your API key and project ID.",
+      "saveFailed": "Failed to save settings. Please try again."
+    }
   },
   "Auth": {
     "signIn": "Sign in",
     "signOut": "Sign out",
     "history": "My analyses",
+    "posthogSettings": "PostHog settings",
     "modal": {
       "title": "Sign in to Landing Page Advisor",
       "emailLabel": "Email address",

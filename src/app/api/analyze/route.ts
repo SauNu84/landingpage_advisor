@@ -12,11 +12,16 @@ import { prisma } from "@/lib/db";
 import { nanoid } from "nanoid";
 import { getSessionFromRequest } from "@/lib/session";
 import { checkAnalysisRateLimit, getClientIp } from "@/lib/rate-limit";
+import { decrypt } from "@/lib/encrypt";
+import { getProjectEvents } from "@/lib/posthog-client";
 import type {
   ExpertName,
   ExpertAnalysis,
   AnalysisResult,
   PostHogAdvice,
+  PostHogLiveData,
+  LiveEventStatus,
+  TrackingStatus,
 } from "@/lib/experts/types";
 
 function parseJsonResponse(text: string): unknown {
@@ -36,6 +41,58 @@ async function callExpert(prompt: string): Promise<ExpertAnalysis> {
 async function callPostHogAdvisor(prompt: string): Promise<PostHogAdvice> {
   const text = await complete(prompt, { maxTokens: 2048 });
   return parseJsonResponse(text) as PostHogAdvice;
+}
+
+async function buildLiveData(
+  advice: PostHogAdvice,
+  projectId: string,
+  apiKey: string,
+  host: string
+): Promise<PostHogLiveData | null> {
+  try {
+    const events = await getProjectEvents(projectId, apiKey, host);
+    const eventMap = new Map(events.map((e) => [e.name.toLowerCase(), e]));
+
+    const eventStatuses: LiveEventStatus[] = advice.trackingPoints.map((tp) => {
+      const key = tp.event.toLowerCase();
+      const match = eventMap.get(key);
+
+      let status: TrackingStatus;
+      if (!match) {
+        status = "not_tracked";
+      } else if ((match.volume_30_day ?? 0) > 0) {
+        status = "tracked";
+      } else {
+        status = "low_volume";
+      }
+
+      return {
+        recommendedEvent: tp.event,
+        status,
+        lastSeen: match?.last_seen_at ?? null,
+        volume30Day: match?.volume_30_day ?? null,
+      };
+    });
+
+    // Top 5 events by volume (last 30 days)
+    const topEvents = events
+      .filter((e) => (e.volume_30_day ?? 0) > 0)
+      .slice(0, 5)
+      .map((e) => ({
+        name: e.name,
+        lastSeen: e.last_seen_at,
+        volume30Day: e.volume_30_day,
+      }));
+
+    return {
+      eventStatuses,
+      topEvents,
+      connectedAt: new Date().toISOString(),
+    };
+  } catch (err) {
+    console.error("[analyze] live PostHog enrichment failed:", err);
+    return null;
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -124,6 +181,27 @@ export async function POST(request: NextRequest) {
       experts,
       posthog,
     };
+
+    // Step 4: Enrich with live PostHog data if user has it connected
+    if (session?.userId) {
+      const posthogConfig = await prisma.postHogConfig.findUnique({
+        where: { userId: session.userId },
+      });
+      if (posthogConfig) {
+        try {
+          const apiKey = decrypt(posthogConfig.apiKey);
+          const liveData = await buildLiveData(
+            posthog,
+            posthogConfig.projectId,
+            apiKey,
+            posthogConfig.host
+          );
+          if (liveData) result.liveData = liveData;
+        } catch (err) {
+          console.error("[analyze] PostHog config decrypt error:", err);
+        }
+      }
+    }
 
     // Persist result and generate shareable slug
     const slug = nanoid(8);

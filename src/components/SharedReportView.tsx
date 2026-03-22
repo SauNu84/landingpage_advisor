@@ -182,7 +182,7 @@ export function SharedReportView({ result, slug }: Props) {
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
             {tAnalyze("postHogTrackingPlan")}
           </h2>
-          <PostHogGuide advice={result.posthog} />
+          <PostHogGuide advice={result.posthog} liveData={result.liveData} />
         </section>
 
         {/* Email capture */}

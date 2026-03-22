@@ -79,11 +79,27 @@ export type ExpertName =
   | "seo"
   | "psychology";
 
+export type TrackingStatus = "tracked" | "low_volume" | "not_tracked";
+
+export interface LiveEventStatus {
+  recommendedEvent: string;
+  status: TrackingStatus;
+  lastSeen?: string | null;
+  volume30Day?: number | null;
+}
+
+export interface PostHogLiveData {
+  eventStatuses: LiveEventStatus[];
+  topEvents: { name: string; lastSeen: string | null; volume30Day: number | null }[];
+  connectedAt: string;
+}
+
 export interface AnalysisResult {
   url: string;
   analysedAt: string;
   experts: Record<ExpertName, ExpertAnalysis>;
   posthog: PostHogAdvice;
+  liveData?: PostHogLiveData;
 }
 
 export interface BulkAnalysisResult {

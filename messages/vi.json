@@ -163,7 +163,8 @@
     "keyMetrics": "Chỉ số chính cần theo dõi",
     "tabs": {
       "events": "Kế hoạch theo dõi sự kiện ({count})",
-      "dashboards": "Bảng điều khiển đề xuất ({count})"
+      "dashboards": "Bảng điều khiển đề xuất ({count})",
+      "liveData": "Dữ liệu trực tiếp"
     },
     "eventsDescription": "Mỗi sự kiện hiển thị loại phân tích PostHog, trực quan hóa và lợi ích kinh doanh được đề xuất.",
     "dashboardsDescription": "Xây dựng các bảng điều khiển này trong PostHog để theo dõi hiệu suất trang đích của bạn theo thời gian.",
@@ -172,12 +173,62 @@
     "postHogView": "Chế độ xem PostHog",
     "properties": "Thuộc tính",
     "copy": "Sao chép",
-    "copied": "Đã sao chép!"
+    "copied": "Đã sao chép!",
+    "liveData": {
+      "badge": "PostHog trực tiếp",
+      "tracked": "Đã theo dõi",
+      "lowVolume": "Khối lượng thấp",
+      "notTracked": "Chưa theo dõi",
+      "recommendedEvents": "Sự kiện được đề xuất — trạng thái trực tiếp",
+      "topEvents": "Sự kiện hàng đầu từ PostHog của bạn (30 ngày qua)",
+      "events30d": "sự kiện/30 ngày",
+      "refreshedAt": "Dữ liệu được lấy lúc {date}",
+      "status": {
+        "tracked": "Đã theo dõi",
+        "low_volume": "Đang theo dõi, khối lượng thấp",
+        "not_tracked": "Chưa theo dõi"
+      }
+    }
+  },
+  "PostHogSettings": {
+    "back": "← Về trang chủ",
+    "title": "Tích hợp PostHog",
+    "subtitle": "Kết nối dự án PostHog của bạn để xem dữ liệu theo dõi trực tiếp cùng với các khuyến nghị AI.",
+    "connectedStatus": "Đã kết nối với PostHog",
+    "projectId": "ID dự án",
+    "apiKey": "Khóa API",
+    "host": "Host",
+    "disconnect": "Ngắt kết nối",
+    "disconnectConfirm": "Bạn có chắc muốn ngắt kết nối PostHog không? Dữ liệu trực tiếp sẽ không còn xuất hiện trong phân tích.",
+    "updateConnection": "Cập nhật kết nối",
+    "connectTitle": "Kết nối dự án PostHog của bạn",
+    "connectDescription": "Nhập Khóa API cá nhân PostHog và ID dự án. Khóa của bạn được mã hóa và lưu trữ an toàn.",
+    "apiKeyLabel": "Khóa API cá nhân",
+    "apiKeyPlaceholderUpdate": "Nhập khóa mới để cập nhật",
+    "apiKeyHint": "Tìm trong PostHog → Cài đặt → Khóa API cá nhân. Cần phạm vi project:read.",
+    "projectIdLabel": "ID dự án",
+    "projectIdHint": "Tìm trong PostHog → Cài đặt dự án → ID dự án.",
+    "hostLabel": "Host PostHog",
+    "hostHint": "Thay đổi nếu bạn tự host PostHog.",
+    "testButton": "Kiểm tra kết nối",
+    "testing": "Đang kiểm tra…",
+    "testSuccess": "Đã kết nối! Dự án: {name}",
+    "saveButton": "Lưu",
+    "saving": "Đang lưu…",
+    "savedSuccess": "Đã lưu cài đặt. Các phân tích trong tương lai sẽ bao gồm dữ liệu PostHog trực tiếp.",
+    "infoTitle": "Dữ liệu nào được lấy?",
+    "infoBody": "Chỉ tên sự kiện và khối lượng được lấy từ dự án PostHog của bạn — không có dữ liệu người dùng, bản ghi phiên hoặc thông tin cá nhân.",
+    "errors": {
+      "apiKeyAndProjectRequired": "Vui lòng nhập cả Khóa API và ID dự án.",
+      "testFailed": "Kiểm tra kết nối thất bại. Kiểm tra khóa API và ID dự án của bạn.",
+      "saveFailed": "Không thể lưu cài đặt. Vui lòng thử lại."
+    }
   },
   "Auth": {
     "signIn": "Đăng nhập",
     "signOut": "Đăng xuất",
     "history": "Phân tích của tôi",
+    "posthogSettings": "Cài đặt PostHog",
     "modal": {
       "title": "Đăng nhập vào Landing Page Advisor",
       "emailLabel": "Địa chỉ email",

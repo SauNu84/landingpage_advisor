@@ -8,11 +8,12 @@ datasource db {
 }
 
 model User {
-  id        String           @id @default(cuid())
-  email     String           @unique
-  createdAt DateTime         @default(now())
-  analyses  AnalysisResult[]
-  otpTokens OtpToken[]
+  id           String           @id @default(cuid())
+  email        String           @unique
+  createdAt    DateTime         @default(now())
+  analyses     AnalysisResult[]
+  otpTokens    OtpToken[]
+  posthogConfig PostHogConfig?
 }
 
 model OtpToken {
@@ -43,4 +44,15 @@ model EmailCapture {
   slug      String
   email     String
   createdAt DateTime @default(now())
+}
+
+model PostHogConfig {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  apiKey    String
+  projectId String
+  host      String   @default("https://app.posthog.com")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }

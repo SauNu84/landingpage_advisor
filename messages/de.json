@@ -163,7 +163,8 @@
     "keyMetrics": "Wichtige Kennzahlen zum Verfolgen",
     "tabs": {
       "events": "Ereignis-Tracking-Plan ({count})",
-      "dashboards": "Empfohlene Dashboards ({count})"
+      "dashboards": "Empfohlene Dashboards ({count})",
+      "liveData": "Live-Daten"
     },
     "eventsDescription": "Jedes Ereignis zeigt den empfohlenen PostHog-Analysetyp, die Visualisierung und den Geschäftsnutzen.",
     "dashboardsDescription": "Erstellen Sie diese Dashboards in PostHog, um die Performance Ihrer Landing Page im Laufe der Zeit zu überwachen.",
@@ -172,12 +173,62 @@
     "postHogView": "PostHog-Ansicht",
     "properties": "Eigenschaften",
     "copy": "Kopieren",
-    "copied": "Kopiert!"
+    "copied": "Kopiert!",
+    "liveData": {
+      "badge": "Live PostHog",
+      "tracked": "Bereits getrackt",
+      "lowVolume": "Geringes Volumen",
+      "notTracked": "Nicht getrackt",
+      "recommendedEvents": "Empfohlene Ereignisse — Live-Status",
+      "topEvents": "Top-Ereignisse aus Ihrem PostHog (letzte 30 Tage)",
+      "events30d": "Ereignisse/30d",
+      "refreshedAt": "Daten abgerufen {date}",
+      "status": {
+        "tracked": "Bereits getrackt",
+        "low_volume": "Getrackt, geringes Volumen",
+        "not_tracked": "Noch nicht getrackt"
+      }
+    }
+  },
+  "PostHogSettings": {
+    "back": "← Zurück zur Startseite",
+    "title": "PostHog-Integration",
+    "subtitle": "Verbinden Sie Ihr PostHog-Projekt, um Live-Tracking-Daten neben KI-Empfehlungen zu sehen.",
+    "connectedStatus": "Mit PostHog verbunden",
+    "projectId": "Projekt-ID",
+    "apiKey": "API-Schlüssel",
+    "host": "Host",
+    "disconnect": "Trennen",
+    "disconnectConfirm": "Möchten Sie PostHog wirklich trennen? Live-Daten werden nicht mehr in Analysen angezeigt.",
+    "updateConnection": "Verbindung aktualisieren",
+    "connectTitle": "Ihr PostHog-Projekt verbinden",
+    "connectDescription": "Geben Sie Ihren persönlichen PostHog-API-Schlüssel und die Projekt-ID ein. Ihr Schlüssel wird verschlüsselt gespeichert.",
+    "apiKeyLabel": "Persönlicher API-Schlüssel",
+    "apiKeyPlaceholderUpdate": "Neuen Schlüssel eingeben",
+    "apiKeyHint": "In PostHog → Einstellungen → Persönliche API-Schlüssel. Benötigt project:read-Bereich.",
+    "projectIdLabel": "Projekt-ID",
+    "projectIdHint": "In PostHog → Projekteinstellungen → Projekt-ID.",
+    "hostLabel": "PostHog-Host",
+    "hostHint": "Ändern Sie dies, wenn Sie PostHog selbst hosten.",
+    "testButton": "Verbindung testen",
+    "testing": "Wird getestet…",
+    "testSuccess": "Verbunden! Projekt: {name}",
+    "saveButton": "Speichern",
+    "saving": "Wird gespeichert…",
+    "savedSuccess": "Einstellungen gespeichert. Zukünftige Analysen enthalten Live-PostHog-Daten.",
+    "infoTitle": "Welche Daten werden abgerufen?",
+    "infoBody": "Es werden nur Ereignisnamen und -volumina aus Ihrem PostHog-Projekt abgerufen — keine Benutzerdaten, Sitzungsaufzeichnungen oder personenbezogene Daten.",
+    "errors": {
+      "apiKeyAndProjectRequired": "Bitte geben Sie sowohl API-Schlüssel als auch Projekt-ID ein.",
+      "testFailed": "Verbindungstest fehlgeschlagen. Überprüfen Sie Ihren API-Schlüssel und die Projekt-ID.",
+      "saveFailed": "Einstellungen konnten nicht gespeichert werden. Bitte versuchen Sie es erneut."
+    }
   },
   "Auth": {
     "signIn": "Anmelden",
     "signOut": "Abmelden",
     "history": "Meine Analysen",
+    "posthogSettings": "PostHog-Einstellungen",
     "modal": {
       "title": "Bei Landing Page Advisor anmelden",
       "emailLabel": "E-Mail-Adresse",

@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import type { PostHogAdvice, TrackingPoint, DashboardSuggestion } from "@/lib/experts/types";
+import type {
+  PostHogAdvice,
+  TrackingPoint,
+  DashboardSuggestion,
+  PostHogLiveData,
+  TrackingStatus,
+} from "@/lib/experts/types";
 
 const ANALYSIS_ICONS: Record<string, string> = {
   Funnel: "⬇️",
@@ -13,6 +19,12 @@ const ANALYSIS_ICONS: Record<string, string> = {
   Correlation: "🔗",
   "User Paths": "🗺️",
   "Feature Flags": "🧪",
+};
+
+const STATUS_BADGES: Record<TrackingStatus, { icon: string; className: string }> = {
+  tracked: { icon: "✅", className: "text-green-700 bg-green-50 border-green-200" },
+  low_volume: { icon: "⚠️", className: "text-amber-700 bg-amber-50 border-amber-200" },
+  not_tracked: { icon: "❌", className: "text-red-700 bg-red-50 border-red-200" },
 };
 
 function CopyButton({ text }: { text: string }) {
@@ -162,13 +174,105 @@ function DashboardCard({ dashboard }: { dashboard: DashboardSuggestion }) {
   );
 }
 
-interface PostHogGuideProps {
-  advice: PostHogAdvice;
+function LiveDataTab({ liveData }: { liveData: PostHogLiveData }) {
+  const t = useTranslations("PostHogGuide");
+
+  const tracked = liveData.eventStatuses.filter((s) => s.status === "tracked").length;
+  const lowVolume = liveData.eventStatuses.filter((s) => s.status === "low_volume").length;
+  const notTracked = liveData.eventStatuses.filter((s) => s.status === "not_tracked").length;
+
+  return (
+    <div className="space-y-6">
+      {/* Summary */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-green-50 border border-green-100 rounded-xl p-3 text-center">
+          <p className="text-2xl font-bold text-green-700">{tracked}</p>
+          <p className="text-xs text-green-600">{t("liveData.tracked")}</p>
+        </div>
+        <div className="bg-amber-50 border border-amber-100 rounded-xl p-3 text-center">
+          <p className="text-2xl font-bold text-amber-700">{lowVolume}</p>
+          <p className="text-xs text-amber-600">{t("liveData.lowVolume")}</p>
+        </div>
+        <div className="bg-red-50 border border-red-100 rounded-xl p-3 text-center">
+          <p className="text-2xl font-bold text-red-700">{notTracked}</p>
+          <p className="text-xs text-red-600">{t("liveData.notTracked")}</p>
+        </div>
+      </div>
+
+      {/* Event status table */}
+      <div>
+        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">
+          {t("liveData.recommendedEvents")}
+        </p>
+        <div className="space-y-2">
+          {liveData.eventStatuses.map((status, i) => {
+            const badge = STATUS_BADGES[status.status];
+            return (
+              <div
+                key={i}
+                className={`flex items-center justify-between px-3 py-2.5 rounded-xl border ${
+                  status.status === "not_tracked" ? "border-red-100 bg-red-50/50" : "border-gray-100 bg-white"
+                }`}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <code className="text-xs text-orange-600 font-mono truncate">
+                    {status.recommendedEvent}
+                  </code>
+                </div>
+                <span
+                  className={`flex-shrink-0 ml-3 text-xs font-medium px-2 py-0.5 rounded-full border ${badge.className}`}
+                >
+                  {badge.icon} {t(`liveData.status.${status.status}`)}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Top events from PostHog */}
+      {liveData.topEvents.length > 0 && (
+        <div>
+          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">
+            {t("liveData.topEvents")}
+          </p>
+          <div className="space-y-2">
+            {liveData.topEvents.map((event, i) => (
+              <div key={i} className="flex items-center justify-between px-3 py-2 bg-white border border-gray-100 rounded-xl">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-400 w-4 text-right">{i + 1}.</span>
+                  <code className="text-xs font-mono text-gray-800">{event.name}</code>
+                </div>
+                <div className="text-right">
+                  {event.volume30Day != null && (
+                    <span className="text-xs font-semibold text-indigo-700">
+                      {event.volume30Day.toLocaleString()} {t("liveData.events30d")}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <p className="text-xs text-gray-400 text-center">
+        {t("liveData.refreshedAt", { date: new Date(liveData.connectedAt).toLocaleString() })}
+      </p>
+    </div>
+  );
 }
 
-export function PostHogGuide({ advice }: PostHogGuideProps) {
+interface PostHogGuideProps {
+  advice: PostHogAdvice;
+  liveData?: PostHogLiveData;
+}
+
+type TabId = "events" | "dashboards" | "live";
+
+export function PostHogGuide({ advice, liveData }: PostHogGuideProps) {
   const t = useTranslations("PostHogGuide");
-  const [activeTab, setActiveTab] = useState<"events" | "dashboards">("events");
+  const [activeTab, setActiveTab] = useState<TabId>("events");
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -199,6 +303,11 @@ export function PostHogGuide({ advice }: PostHogGuideProps) {
               })}
             </p>
           </div>
+          {liveData && (
+            <span className="ml-auto text-xs font-medium px-2 py-0.5 bg-green-100 text-green-700 rounded-full border border-green-200">
+              {t("liveData.badge")}
+            </span>
+          )}
         </div>
         <p className="text-sm text-gray-600 leading-relaxed">
           {advice.strategy}
@@ -246,6 +355,18 @@ export function PostHogGuide({ advice }: PostHogGuideProps) {
         >
           {t("tabs.dashboards", { count: (advice.dashboards ?? []).length })}
         </button>
+        {liveData && (
+          <button
+            onClick={() => setActiveTab("live")}
+            className={`flex-1 py-3 text-xs font-medium transition-colors ${
+              activeTab === "live"
+                ? "text-green-700 border-b-2 border-green-500 bg-green-50"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            {t("tabs.liveData")}
+          </button>
+        )}
       </div>
 
       {/* Tab content */}
@@ -275,6 +396,10 @@ export function PostHogGuide({ advice }: PostHogGuideProps) {
               )}
             </div>
           </>
+        )}
+
+        {activeTab === "live" && liveData && (
+          <LiveDataTab liveData={liveData} />
         )}
       </div>
     </div>

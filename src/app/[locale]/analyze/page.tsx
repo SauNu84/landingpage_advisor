@@ -210,7 +210,7 @@ export default function AnalyzePage() {
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
             {t("postHogTrackingPlan")}
           </h2>
-          <PostHogGuide advice={result.posthog} />
+          <PostHogGuide advice={result.posthog} liveData={result.liveData} />
         </section>
 
         {/* Email capture */}

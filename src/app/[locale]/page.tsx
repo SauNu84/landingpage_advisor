@@ -263,6 +263,7 @@ export default function HomePage() {
                 signIn: tAuth("signIn"),
                 signOut: tAuth("signOut"),
                 history: tAuth("history"),
+                posthogSettings: tAuth("posthogSettings"),
                 modal: {
                   title: tAuth("modal.title"),
                   emailLabel: tAuth("modal.emailLabel"),
