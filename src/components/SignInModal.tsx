@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import FocusTrap from "focus-trap-react";
 
 interface Props {
   onClose: () => void;
@@ -87,7 +88,11 @@ export function SignInModal({ onClose, onSignedIn, translations: t }: Props) {
   }
 
   return (
+    <FocusTrap>
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="signin-modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -104,7 +109,7 @@ export function SignInModal({ onClose, onSignedIn, translations: t }: Props) {
           </svg>
         </button>
 
-        <h2 className="text-xl font-semibold text-gray-900 mb-1">{t.title}</h2>
+        <h2 id="signin-modal-title" className="text-xl font-semibold text-gray-900 mb-1">{t.title}</h2>
 
         {step === "email" ? (
           <form onSubmit={handleRequestOtp} className="mt-4 space-y-4">
@@ -181,5 +186,6 @@ export function SignInModal({ onClose, onSignedIn, translations: t }: Props) {
         )}
       </div>
     </div>
+    </FocusTrap>
   );
 }

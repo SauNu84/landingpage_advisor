@@ -7,20 +7,13 @@ import { buildContentPrompt } from "@/lib/experts/content";
 import { buildSeoPrompt } from "@/lib/experts/seo";
 import { buildPsychologyPrompt } from "@/lib/experts/psychology";
 import { buildPostHogAdvisorPrompt } from "@/lib/posthog-advisor";
+import { parseJsonResponse } from "@/lib/parse-json-response";
 import type {
   ExpertName,
   ExpertAnalysis,
   AnalysisResult,
   PostHogAdvice,
 } from "@/lib/experts/types";
-
-function parseJsonResponse(text: string): unknown {
-  const cleaned = text
-    .replace(/^```(?:json)?\s*/m, "")
-    .replace(/\s*```\s*$/m, "")
-    .trim();
-  return JSON.parse(cleaned);
-}
 
 async function callExpert(prompt: string): Promise<ExpertAnalysis> {
   const text = await complete(prompt, { maxTokens: 1024 });

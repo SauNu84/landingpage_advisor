@@ -5,6 +5,11 @@ export const SESSION_COOKIE = "auth_session";
 const SESSION_MAX_AGE = 7 * 24 * 60 * 60; // 7 days in seconds
 
 function getSecret(): Uint8Array {
+  if (!process.env.SESSION_SECRET && process.env.NODE_ENV === "production") {
+    throw new Error(
+      "SESSION_SECRET environment variable is required in production"
+    );
+  }
   const raw =
     process.env.SESSION_SECRET ?? "dev-secret-must-change-in-production!!";
   return new TextEncoder().encode(raw.padEnd(32, "!").slice(0, 64));
@@ -49,10 +54,13 @@ export async function getSessionFromRequest(
   return verifySessionToken(token);
 }
 
+const SECURE_FLAG =
+  process.env.NODE_ENV === "production" ? "; Secure" : "";
+
 export function sessionCookieHeader(token: string): string {
-  return `${SESSION_COOKIE}=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${SESSION_MAX_AGE}`;
+  return `${SESSION_COOKIE}=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${SESSION_MAX_AGE}${SECURE_FLAG}`;
 }
 
 export function clearSessionCookieHeader(): string {
-  return `${SESSION_COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0`;
+  return `${SESSION_COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0${SECURE_FLAG}`;
 }

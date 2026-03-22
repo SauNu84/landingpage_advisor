@@ -37,6 +37,9 @@ model AnalysisResult {
   ip            String?
   createdAt     DateTime @default(now())
   user          User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([ip])
 }
 
 model EmailCapture {
@@ -44,6 +47,8 @@ model EmailCapture {
   slug      String
   email     String
   createdAt DateTime @default(now())
+
+  @@unique([slug, email])
 }
 
 model PostHogConfig {

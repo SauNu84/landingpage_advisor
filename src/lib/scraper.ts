@@ -43,7 +43,16 @@ export async function scrapePage(url: string): Promise<PageData> {
     throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
   }
 
+  const MAX_CONTENT_LENGTH = 5 * 1024 * 1024; // 5MB
+  const contentLength = response.headers.get("content-length");
+  if (contentLength && parseInt(contentLength, 10) > MAX_CONTENT_LENGTH) {
+    throw new Error(`Response too large: ${contentLength} bytes (max 5MB)`);
+  }
+
   const html = await response.text();
+  if (html.length > MAX_CONTENT_LENGTH) {
+    throw new Error(`Response too large (max 5MB)`);
+  }
   const $ = cheerio.load(html);
 
   // Remove script and style content

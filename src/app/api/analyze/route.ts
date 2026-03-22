@@ -14,6 +14,7 @@ import { getSessionFromRequest } from "@/lib/session";
 import { checkAnalysisRateLimit, getClientIp } from "@/lib/rate-limit";
 import { decrypt } from "@/lib/encrypt";
 import { getProjectEvents } from "@/lib/posthog-client";
+import { parseJsonResponse } from "@/lib/parse-json-response";
 import type {
   ExpertName,
   ExpertAnalysis,
@@ -23,15 +24,6 @@ import type {
   LiveEventStatus,
   TrackingStatus,
 } from "@/lib/experts/types";
-
-function parseJsonResponse(text: string): unknown {
-  // Strip markdown code fences if present
-  const cleaned = text
-    .replace(/^```(?:json)?\s*/m, "")
-    .replace(/\s*```\s*$/m, "")
-    .trim();
-  return JSON.parse(cleaned);
-}
 
 async function callExpert(prompt: string): Promise<ExpertAnalysis> {
   const text = await complete(prompt, { maxTokens: 1024 });

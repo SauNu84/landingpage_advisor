@@ -39,17 +39,18 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Mark OTP as used
-  await prisma.otpToken.update({
-    where: { id: otp.id },
-    data: { usedAt: new Date() },
-  });
+  // Mark OTP as used and upsert user atomically to prevent race conditions
+  const user = await prisma.$transaction(async (tx) => {
+    await tx.otpToken.update({
+      where: { id: otp.id },
+      data: { usedAt: new Date() },
+    });
 
-  // Upsert user
-  const user = await prisma.user.upsert({
-    where: { email },
-    update: {},
-    create: { email },
+    return tx.user.upsert({
+      where: { email },
+      update: {},
+      create: { email },
+    });
   });
 
   const sessionToken = await createSessionToken({
