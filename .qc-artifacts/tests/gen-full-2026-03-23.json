@@ -1,0 +1,55 @@
+{
+  "date": "2026-03-23",
+  "module": "full",
+  "mode": "findings",
+  "stack": {
+    "language": "TypeScript",
+    "framework": "Next.js 14",
+    "testFramework": "Jest",
+    "dbLayer": "Prisma/SQLite"
+  },
+  "files": [
+    {
+      "file": ".qc-artifacts/scripts/d4-security.gen.test.ts",
+      "tests": 14,
+      "dimensions": ["D4"],
+      "findings": ["FINDING-001", "FINDING-002", "FINDING-005", "FINDING-006"],
+      "description": "Security: OTP rate-limit absence, OTP brute-force absence, unauthenticated /api/email, email endpoint rate-limit absence"
+    },
+    {
+      "file": ".qc-artifacts/scripts/d7-edge-cases.gen.test.ts",
+      "tests": 9,
+      "dimensions": ["D7"],
+      "findings": ["FINDING-003", "FINDING-004"],
+      "description": "Edge cases: /api/email unhandled DB crash, averageScore() NaN on empty experts"
+    },
+    {
+      "file": ".qc-artifacts/scripts/d9-compliance.gen.test.ts",
+      "tests": 10,
+      "dimensions": ["D9"],
+      "findings": ["FINDING-022", "FINDING-023"],
+      "description": "Compliance: no DELETE /api/auth/account endpoint, no data retention / TTL mechanism"
+    },
+    {
+      "file": ".qc-artifacts/scripts/d10-observability.gen.test.ts",
+      "tests": 22,
+      "dimensions": ["D10"],
+      "findings": ["FINDING-029"],
+      "description": "Observability: logger API surface, structured output fields, absent correlation/request IDs"
+    }
+  ],
+  "totalFiles": 4,
+  "totalTests": 55,
+  "dimensionCoverage": {
+    "D1": 0,
+    "D2": 3,
+    "D3": 0,
+    "D4": 14,
+    "D5": 0,
+    "D6": 0,
+    "D7": 9,
+    "D8": 0,
+    "D9": 10,
+    "D10": 22
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "generated": "2026-03-23",
+  "phase": "PRISM-Phase3",
+  "generator": "claude-sonnet-4-6",
+  "workflows": [
+    {
+      "id": "auth-flow",
+      "dimensions": ["D2", "D4"],
+      "file": "scripts/auth-flow.e2e.gen.test.ts",
+      "steps": 5,
+      "endpoints": [
+        "POST /api/auth/request-otp",
+        "POST /api/auth/verify-otp",
+        "GET /api/auth/me",
+        "POST /api/auth/signout"
+      ],
+      "tests": 13,
+      "errorPaths": [
+        "missing email → 400",
+        "invalid email format → 400",
+        "invalid OTP → 401",
+        "missing token → 400",
+        "missing email in verify → 400"
+      ]
+    },
+    {
+      "id": "analysis-lifecycle",
+      "dimensions": ["D2", "D5"],
+      "file": "scripts/analysis-lifecycle.e2e.gen.test.ts",
+      "steps": 4,
+      "endpoints": [
+        "POST /api/analyze",
+        "POST /api/results",
+        "GET /api/results/[slug]",
+        "GET /api/history"
+      ],
+      "tests": 17,
+      "errorPaths": [
+        "missing url → 400",
+        "invalid URL format → 400",
+        "unauthenticated results store → 401",
+        "missing url in results → 400",
+        "unknown slug → 404",
+        "unauthenticated history → 401"
+      ]
+    },
+    {
+      "id": "posthog-settings-crud",
+      "dimensions": ["D2", "D4", "D5"],
+      "file": "scripts/posthog-settings-crud.e2e.gen.test.ts",
+      "steps": 6,
+      "endpoints": [
+        "POST /api/settings/posthog",
+        "GET /api/settings/posthog",
+        "POST /api/settings/posthog/test",
+        "DELETE /api/settings/posthog"
+      ],
+      "tests": 21,
+      "errorPaths": [
+        "unauthenticated GET → 401",
+        "unauthenticated POST → 401",
+        "unauthenticated DELETE → 401",
+        "unauthenticated test → 401",
+        "missing apiKey → 400",
+        "missing projectId → 400",
+        "test connection failure forwarded"
+      ]
+    },
+    {
+      "id": "rate-limit-enforcement",
+      "dimensions": ["D4", "D7"],
+      "file": "scripts/rate-limit-enforcement.e2e.gen.test.ts",
+      "steps": 3,
+      "endpoints": [
+        "POST /api/analyze",
+        "POST /api/bulk",
+        "POST /api/compare"
+      ],
+      "tests": 18,
+      "errorPaths": [
+        "analyze rate limited anonymous → 429 + Sign in",
+        "analyze rate limited authenticated → 429 no Sign in",
+        "bulk rate limited anonymous → 429 + Sign in",
+        "bulk rate limited authenticated → 429 no Sign in",
+        "compare rate limited anonymous → 429 + Sign in",
+        "compare rate limited authenticated → 429 no Sign in"
+      ]
+    }
+  ],
+  "summary": {
+    "totalWorkflows": 4,
+    "totalTests": 69,
+    "endpointsCovered": 13,
+    "totalEndpoints": 16,
+    "coveragePercent": 81
+  }
+}

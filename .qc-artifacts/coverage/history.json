@@ -16,5 +16,66 @@
     },
     "overall": 47,
     "gate": "BLOCKED"
+  },
+  {
+    "date": "2026-03-23",
+    "type": "static",
+    "module": "full",
+    "command": "qc-pipeline:phase1",
+    "scores": {
+      "D1": 57.1,
+      "D2": 58.3,
+      "D3": 66.7,
+      "D4": 64.3,
+      "D5": 58.3,
+      "D6": 66.7,
+      "D7": 50.0,
+      "D8": 7.1,
+      "D9": 7.1,
+      "D10": 14.3
+    },
+    "overall": 45.0,
+    "gate": "BLOCKED",
+    "p0Count": 7,
+    "p1Count": 16,
+    "testsRun": 163,
+    "testPassRate": 100.0
+  },
+  {
+    "date": "2026-03-23",
+    "type": "exec",
+    "module": "full",
+    "command": "qc-pipeline:phase4",
+    "runner": "jest",
+    "total": 290,
+    "passed": 290,
+    "failed": 0,
+    "duration_ms": 4039,
+    "dimensionScores": {
+      "D1": null,
+      "D2": 100.0,
+      "D3": null,
+      "D4": 100.0,
+      "D5": 100.0,
+      "D6": null,
+      "D7": 100.0,
+      "D8": null,
+      "D9": 100.0,
+      "D10": 100.0
+    },
+    "compositeScores": {
+      "D1": 57.1,
+      "D2": 79.2,
+      "D3": 66.7,
+      "D4": 82.2,
+      "D5": 79.2,
+      "D6": 66.7,
+      "D7": 75.0,
+      "D8": 7.1,
+      "D9": 53.6,
+      "D10": 57.2
+    },
+    "overall": 62.4,
+    "gate": "CONDITIONAL"
   }
 ]

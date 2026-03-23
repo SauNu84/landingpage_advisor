@@ -1,0 +1,85 @@
+{
+  "id": "e2e-ui-2026-03-23",
+  "date": "2026-03-23",
+  "type": "playwright",
+  "phase": "3b",
+  "description": "PRISM Phase 3b — UI E2E test scaffolds for Landing Page Advisor",
+  "notes": [
+    "@playwright/test is NOT installed. Run: npm install --save-dev @playwright/test",
+    "All tests require a running dev server: npm run dev",
+    "playwright.config.ts was CREATED at project root",
+    "tests marked test.fail() are intentional — they confirm known findings from static analysis"
+  ],
+  "playwright": {
+    "configFile": "playwright.config.ts",
+    "testDir": ".qc-artifacts/scripts",
+    "testMatch": "**/*.e2e-ui.gen.spec.ts",
+    "baseURL": "http://localhost:3000"
+  },
+  "fixtures": {
+    "file": ".qc-artifacts/scripts/ui-fixtures.ts",
+    "exports": [
+      "requestOtp",
+      "verifyOtp",
+      "loginViaAPI",
+      "injectSessionCookie",
+      "test (authenticatedPage fixture)",
+      "expect"
+    ]
+  },
+  "flows": [
+    {
+      "id": "01",
+      "name": "auth-flow",
+      "file": ".qc-artifacts/scripts/01-auth-flow.e2e-ui.gen.spec.ts",
+      "description": "Landing page → sign-in button → modal → email step → OTP step → close/back",
+      "tests": 11,
+      "intentionallyFailing": 1,
+      "failingFindings": ["FINDING-010"]
+    },
+    {
+      "id": "02",
+      "name": "landing-analyze-flow",
+      "file": ".qc-artifacts/scripts/02-landing-analyze-flow.e2e-ui.gen.spec.ts",
+      "description": "Landing URL input → validation → mode tabs → submit → loading → /analyze results",
+      "tests": 13,
+      "intentionallyFailing": 0,
+      "failingFindings": []
+    },
+    {
+      "id": "03",
+      "name": "accessibility-checks",
+      "file": ".qc-artifacts/scripts/03-accessibility-checks.e2e-ui.gen.spec.ts",
+      "description": "A11y checks across pages — skip link, aria-expanded, focus trap, aria-describedby",
+      "tests": 12,
+      "intentionallyFailing": 4,
+      "failingFindings": ["FINDING-010", "FINDING-012", "FINDING-013"]
+    },
+    {
+      "id": "04",
+      "name": "history-page",
+      "file": ".qc-artifacts/scripts/04-history-page.e2e-ui.gen.spec.ts",
+      "description": "History page — auth guard, loading, empty state, item cards, pagination",
+      "tests": 11,
+      "intentionallyFailing": 0,
+      "failingFindings": []
+    },
+    {
+      "id": "05",
+      "name": "posthog-settings",
+      "file": ".qc-artifacts/scripts/05-posthog-settings.e2e-ui.gen.spec.ts",
+      "description": "PostHog settings — auth guard, save, test connection, masked key, disconnect",
+      "tests": 13,
+      "intentionallyFailing": 0,
+      "failingFindings": []
+    }
+  ],
+  "summary": {
+    "totalFlows": 5,
+    "totalTests": 60,
+    "intentionallyFailingTests": 5,
+    "findingsConfirmed": ["FINDING-010", "FINDING-012", "FINDING-013"],
+    "playwrightConfigCreated": true,
+    "playwrightInstalled": false
+  }
+}

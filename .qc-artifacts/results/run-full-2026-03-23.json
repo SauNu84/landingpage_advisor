@@ -1,0 +1,193 @@
+{
+  "date": "2026-03-23",
+  "module": "full",
+  "type": "static",
+  "filesAnalyzed": 68,
+  "linesOfCode": 3800,
+  "modulesAnalyzed": [
+    {"name": "API Routes", "path": "src/app/api/", "description": "14 route handlers covering auth, analyze, bulk, compare, history, results, email, health, posthog settings"},
+    {"name": "Frontend Pages", "path": "src/app/[locale]/", "description": "7 i18n-aware pages: home, analyze, bulk, compare, history, settings/posthog, shared report"},
+    {"name": "React Components", "path": "src/components/", "description": "10 UI components: SignInModal, UserNav, ScoreGauge, ExpertCard, LoadingExpert, LanguageSwitcher, ComparisonBanner, SharedReportView, BulkReportView, PostHogGuide"},
+    {"name": "Lib Utilities", "path": "src/lib/", "description": "12 lib modules: ai-provider, analyze-pipeline, db, email, encrypt, logger, parse-json-response, posthog-advisor, posthog-client, rate-limit, scraper, session"},
+    {"name": "Expert Prompt Builders", "path": "src/lib/experts/", "description": "6 expert modules: content, experiment, psychology, seo, ui-design, ux-research + shared types and index"},
+    {"name": "Database Schema", "path": "prisma/schema.prisma", "description": "5 models: User, OtpToken, AnalysisResult, PostHogConfig, EmailCapture"},
+    {"name": "Middleware & i18n", "path": "src/middleware.ts, src/i18n/", "description": "Next.js locale routing middleware and request configuration"},
+    {"name": "Test Suite", "path": "src/__tests__/", "description": "16 test files, 163 tests covering all API routes and key lib modules"}
+  ],
+  "dimensions": {
+    "D1": {
+      "name": "UI/UX",
+      "score": 57.1,
+      "checks": [
+        {"item": "Navigation: all pages reachable, back works", "status": "pass", "detail": "All pages have back navigation via router.push('/') or Link components"},
+        {"item": "Responsive: mobile 375px / tablet 768px / desktop 1440px", "status": "partial", "file": "src/components/BulkReportView.tsx", "line": 143, "detail": "Tailwind breakpoints used throughout; BulkReportView ranking table may overflow at 375px"},
+        {"item": "Loading states: skeleton/spinner on async ops", "status": "partial", "file": "src/app/[locale]/history/page.tsx", "line": 86, "detail": "Most pages use spinners; history page uses text-only 'loading' state"},
+        {"item": "Empty states: no data, first use, no search results", "status": "partial", "file": "src/components/BulkReportView.tsx", "line": 63, "detail": "History has empty state; BulkReportView renders empty table with no message if results array is empty"},
+        {"item": "Form behavior: validation, error messages, tab order", "status": "partial", "file": "src/app/[locale]/analyze/page.tsx", "line": 233, "detail": "URL/email/OTP validated with inline errors; email capture input lacks id/label association"},
+        {"item": "Interactive states: hover, focus, active, disabled, loading, error", "status": "partial", "file": "src/components/UserNav.tsx", "line": 91, "detail": "Buttons have hover/disabled states; UserNav dropdown missing aria-expanded/aria-haspopup"},
+        {"item": "Feedback: success/error notifications after actions", "status": "partial", "file": "src/components/UserNav.tsx", "line": 63, "detail": "Most actions provide feedback; sign-out silently closes menu with no confirmation"}
+      ]
+    },
+    "D2": {
+      "name": "API",
+      "score": 58.3,
+      "checks": [
+        {"item": "Route definitions match expected CRUD operations", "status": "pass", "detail": "All 14 endpoints cover expected CRUD patterns for the domain"},
+        {"item": "Status codes: correct codes for success, client error, server error", "status": "partial", "file": "src/app/api/email/route.ts", "line": 22, "detail": "All routes use correct codes; /api/email has no try/catch so DB failure returns unhandled 500"},
+        {"item": "Input validation: request body/params validated before processing", "status": "partial", "file": "src/app/api/auth/request-otp/route.ts", "line": 18, "detail": "All routes validate input; email validation uses only includes('@') — accepts malformed emails"},
+        {"item": "Error responses: consistent format with message", "status": "fail", "file": "src/app/api/email/route.ts", "line": 22, "detail": "All routes use {error:'...'} format except /api/email which can crash without error response"},
+        {"item": "Pagination: offset/limit/sorting for list endpoints", "status": "pass", "detail": "/api/history uses cursor-based pagination with PAGE_SIZE=20, hasMore, nextCursor"},
+        {"item": "Idempotency: duplicate requests handled safely", "status": "partial", "file": "src/app/api/email/route.ts", "line": 22, "detail": "Auth routes and settings use upsert correctly; email capture allows duplicate rows"}
+      ]
+    },
+    "D3": {
+      "name": "Performance",
+      "score": 66.7,
+      "checks": [
+        {"item": "N+1 queries: no loops with DB calls inside", "status": "pass", "detail": "Promise.all used for parallel AI calls; no DB calls inside loops found"},
+        {"item": "Indexes: queries use indexed columns", "status": "partial", "file": "src/lib/rate-limit.ts", "line": 20, "detail": "userId and ip indexed separately but no composite index on (userId,createdAt) or (ip,createdAt)"},
+        {"item": "Payload size: responses don't return unnecessary data", "status": "partial", "file": "src/app/api/history/route.ts", "line": 36, "detail": "History parses full multi-KB JSON blob per record just to extract scores — wastes memory"},
+        {"item": "Async operations: long tasks don't block request", "status": "pass", "detail": "All AI calls and scraping are properly async/await with Promise.all for parallelism"},
+        {"item": "Caching: repeated lookups cached where appropriate", "status": "fail", "file": "src/app/api/analyze/route.ts", "line": 180, "detail": "PostHog config queried from DB on every authenticated analysis with no caching layer"},
+        {"item": "Bundle: no unnecessary imports inflating size", "status": "pass", "detail": "Resend SDK dynamically imported in email.ts; cheerio externalized in next.config.mjs"}
+      ]
+    },
+    "D4": {
+      "name": "Security",
+      "score": 64.3,
+      "checks": [
+        {"item": "Authentication: all routes behind auth middleware", "status": "partial", "file": "src/app/api/email/route.ts", "line": 1, "detail": "History, results, settings auth-gated; analyze/bulk/compare open by design; email endpoint unauthenticated"},
+        {"item": "Authorization: RBAC checks per endpoint", "status": "pass", "detail": "History and settings scoped to session.userId; shared results public by design (no RBAC needed)"},
+        {"item": "Input sanitization: user input escaped/validated", "status": "partial", "file": "src/app/api/analyze/route.ts", "line": 146, "detail": "URLs validated via new URL(); emails trimmed/lowercased; scraped content passed to LLM without sanitization (prompt injection risk)"},
+        {"item": "No data exposure: API doesn't leak sensitive fields", "status": "partial", "file": "src/app/api/results/[slug]/route.ts", "line": 17, "detail": "Auth/me returns only id+email; PostHog key masked; shared results include liveData from user's private PostHog account"},
+        {"item": "Rate limiting: abuse prevention on sensitive endpoints", "status": "fail", "file": "src/app/api/auth/request-otp/route.ts", "line": 1, "detail": "Analyze/bulk/compare rate-limited; OTP request/verify endpoints have NO rate limiting — brute-force OTP possible"},
+        {"item": "Secrets: no hardcoded credentials, env vars used", "status": "pass", "detail": "All API keys from process.env; PostHog keys encrypted at rest"},
+        {"item": "SQL injection: parameterized queries", "status": "pass", "detail": "All DB access via Prisma ORM; no raw SQL found"}
+      ]
+    },
+    "D5": {
+      "name": "Data Integrity",
+      "score": 58.3,
+      "checks": [
+        {"item": "CRUD lifecycle: create/read/update/delete all consistent", "status": "partial", "file": "src/app/api/results/route.ts", "line": 26, "detail": "Core CRUD consistent; /api/results POST omits ip field; no User/EmailCapture delete endpoints"},
+        {"item": "Foreign keys: relations enforced at DB level", "status": "partial", "file": "prisma/schema.prisma", "line": 45, "detail": "Most FKs enforced; EmailCapture.slug has no FK to AnalysisResult — orphans possible on delete"},
+        {"item": "Unique constraints: duplicates prevented", "status": "pass", "detail": "slug unique, email unique, [slug,email] unique on EmailCapture, userId unique on PostHogConfig"},
+        {"item": "Cascade behavior: deletes don't orphan data", "status": "fail", "file": "prisma/schema.prisma", "line": 45, "detail": "Deleting AnalysisResult leaves EmailCapture rows orphaned; OtpToken records accumulate indefinitely with no cleanup"},
+        {"item": "Transaction usage: multi-step writes wrapped in transactions", "status": "partial", "file": "src/app/api/auth/request-otp/route.ts", "line": 27, "detail": "verify-otp correctly uses $transaction; request-otp 3-step write (upsert+updateMany+create) is not transactional"},
+        {"item": "Validation: business rules enforced before DB write", "status": "pass", "detail": "URL, email, OTP, and field validation in all routes before DB operations"}
+      ]
+    },
+    "D6": {
+      "name": "Infrastructure",
+      "score": 66.7,
+      "checks": [
+        {"item": "Health checks: app has liveness/readiness indicators", "status": "partial", "file": "src/app/api/health/route.ts", "line": 1, "detail": "Health endpoint exists and returns 200; does not check DB connectivity or AI provider key presence"},
+        {"item": "Environment config: env vars for all environment-specific values", "status": "partial", "detail": "All secrets from process.env; SESSION_SECRET missing from .env.local.example — likely to be omitted in new deployments"},
+        {"item": "Logging: errors and key operations logged", "status": "pass", "detail": "Structured JSON logger used in all API routes for errors and key operations"},
+        {"item": "Error recovery: uncaught exceptions don't crash server", "status": "pass", "detail": "Try/catch in all route handlers; Next.js catches unhandled route exceptions"},
+        {"item": "Migration safety: schema changes are additive/safe", "status": "pass", "detail": "All 3 migrations verified additive-only; migration 3 uses safe SQLite table-redefinition pattern"},
+        {"item": "Docker: services properly containerized", "status": "fail", "detail": "No Dockerfile, docker-compose.yml, or .dockerignore found in repository"}
+      ]
+    },
+    "D7": {
+      "name": "Edge Cases",
+      "score": 50.0,
+      "checks": [
+        {"item": "Null/undefined: handled in inputs and DB results", "status": "partial", "file": "src/app/[locale]/analyze/page.tsx", "line": 17, "detail": "Most null checks present; averageScore() divides by scores.length with no guard — returns NaN if experts object is empty"},
+        {"item": "Boundary values: min/max/overflow tested", "status": "partial", "file": "src/components/ScoreGauge.tsx", "line": 25, "detail": "Bulk min/max enforced; ScoreGauge does not clamp score to 0-100 — overflowing arc on malformed AI response"},
+        {"item": "Concurrent operations: race conditions addressed", "status": "partial", "file": "src/lib/rate-limit.ts", "line": 13, "detail": "verify-otp uses transaction; rate-limit check is non-atomic (read-then-compare); request-otp OTP operations not transactional"},
+        {"item": "Network failure: timeouts and retries for external calls", "status": "partial", "file": "src/lib/scraper.ts", "line": 39, "detail": "Scraper has 15s AbortSignal timeout; AI provider calls have no explicit timeout — can hang indefinitely"},
+        {"item": "State transitions: invalid state changes rejected", "status": "pass", "detail": "OTP can only be verified once; session cleared atomically on signout; bulk returns 502 if all analyses fail"},
+        {"item": "Graceful degradation: partial failures don't cascade", "status": "fail", "file": "src/app/api/email/route.ts", "line": 22, "detail": "Bulk uses allSettled (good); PostHog enrichment failures caught gracefully; /api/email has no try/catch and will crash on DB failure"}
+      ]
+    },
+    "D8": {
+      "name": "Accessibility",
+      "score": 7.1,
+      "checks": [
+        {"item": "ARIA: roles, labels, states on interactive elements", "status": "fail", "file": "src/components/UserNav.tsx", "line": 91, "detail": "SignInModal has role=dialog+aria-modal; UserNav dropdown missing aria-expanded/aria-haspopup; ExpertCard expand button missing aria-expanded; LoadingExpert has no aria-live region"},
+        {"item": "Keyboard: all actions reachable via keyboard alone", "status": "fail", "file": "src/components/UserNav.tsx", "line": 53, "detail": "All elements are native button/link; UserNav dropdown Escape key not handled; SignInModal no Escape handler"},
+        {"item": "Focus: visible focus indicators, logical order", "status": "partial", "file": "src/components/UserNav.tsx", "line": 53, "detail": "Inputs have focus:ring-2; SignInModal uses FocusTrap; UserNav dropdown has no focus trap"},
+        {"item": "Color contrast: text >= 4.5:1, large text >= 3:1", "status": "fail", "detail": "text-gray-400 on white (#9ca3af) = 2.85:1 (fails AA); amber score color (#f59e0b) on white = 2.4:1 (fails AA)"},
+        {"item": "Screen reader: logical content order, decorative images hidden", "status": "fail", "file": "src/app/[locale]/page.tsx", "line": 289, "detail": "All decorative SVG icons lack aria-hidden=true; emoji icons in expert cards rendered without aria-hidden"},
+        {"item": "Forms: all inputs labeled, errors announced", "status": "fail", "file": "src/components/SignInModal.tsx", "line": 117, "detail": "SignInModal labels lack htmlFor; PostHog settings labels lack htmlFor; email capture has no label; errors not linked via aria-describedby"},
+        {"item": "Skip links: bypass navigation available", "status": "fail", "detail": "No skip navigation link found anywhere in the application"}
+      ]
+    },
+    "D9": {
+      "name": "Compliance & Privacy",
+      "score": 7.1,
+      "checks": [
+        {"item": "Consent: obtained before collecting PII", "status": "fail", "file": "src/app/api/email/route.ts", "line": 22, "detail": "Email addresses collected via /api/email with no documented consent mechanism or privacy notice"},
+        {"item": "Retention: policies defined and enforced", "status": "fail", "detail": "No retention policies defined; AnalysisResult, EmailCapture, OtpToken, PostHogConfig accumulate indefinitely"},
+        {"item": "Right to delete: user data purgeable on request", "status": "fail", "detail": "No user account deletion endpoint; no erasure tooling; PostHogConfig DELETE exists but doesn't delete the user"},
+        {"item": "Audit logging: sensitive operations logged", "status": "fail", "detail": "No audit log for auth events, config changes, or data access — only operational stdout logging"},
+        {"item": "Cookie consent: tracking cookies require opt-in", "status": "fail", "detail": "No cookie consent banner or opt-in mechanism found anywhere in the codebase"},
+        {"item": "Encryption: PII encrypted at rest and in transit", "status": "partial", "file": "src/lib/encrypt.ts", "line": 12, "detail": "PostHog keys encrypted with AES-256-CBC (should be GCM); fallback hardcoded key if SESSION_SECRET unset; IP addresses stored in plaintext"},
+        {"item": "Third-party: data sharing agreements documented", "status": "fail", "detail": "No documented DPA with PostHog, Resend, or AI providers (Anthropic/OpenAI) as sub-processors"}
+      ]
+    },
+    "D10": {
+      "name": "Observability",
+      "score": 14.3,
+      "checks": [
+        {"item": "Structured logging: JSON format with correlation IDs", "status": "partial", "file": "src/lib/logger.ts", "line": 1, "detail": "JSON structured logging implemented with timestamp/level/module/message; no requestId or traceId for request correlation"},
+        {"item": "Error tracking: captured with stack traces and context", "status": "partial", "file": "src/lib/logger.ts", "line": 39, "detail": "Errors logged with stack traces to stdout; no error tracking service (Sentry/Bugsnag) for aggregation/alerting"},
+        {"item": "Metrics: business and technical KPIs exposed", "status": "fail", "detail": "No metrics endpoint; no StatsD/Prometheus client; no business KPI counters (analyses/day, error rate, rate-limit hit rate)"},
+        {"item": "Health endpoints: liveness and readiness probes", "status": "partial", "file": "src/app/api/health/route.ts", "line": 1, "detail": "Liveness endpoint exists (/api/health); no readiness check with DB/provider dependency validation"},
+        {"item": "Alerting: defined for SLO violations", "status": "fail", "detail": "No alerting rules, PagerDuty/OpsGenie configs, or SLO definitions found in repository"},
+        {"item": "Tracing: distributed traces for cross-service requests", "status": "fail", "detail": "No OpenTelemetry or distributed tracing; 7+ AI calls per analysis have no trace context"},
+        {"item": "Dashboards: operational dashboards for key flows", "status": "fail", "detail": "No infrastructure operational dashboards; PostHog advisor generates user dashboards but not for the app itself"}
+      ]
+    }
+  },
+  "findings": [
+    {"id": "FINDING-001", "dimension": "D4", "severity": "P0", "file": "src/app/api/auth/request-otp/route.ts", "line": 1, "description": "No rate limiting on OTP request endpoint — attacker can flood victim's email or exhaust email provider quota", "risk": "Spam / DoS / account harassment", "suggestion": "Add IP-based rate limiting (e.g., 3 OTP requests per email per 15 minutes)"},
+    {"id": "FINDING-002", "dimension": "D4", "severity": "P0", "file": "src/app/api/auth/verify-otp/route.ts", "line": 1, "description": "No rate limiting or brute-force lockout on OTP verification — 6-digit OTP brute-forceable in 1M requests", "risk": "Account takeover", "suggestion": "Add attempt counter per OTP token; lock out after 5 failed attempts"},
+    {"id": "FINDING-003", "dimension": "D7", "severity": "P0", "file": "src/app/api/email/route.ts", "line": 22, "description": "No try/catch around prisma.emailCapture.create — unhandled DB exception crashes the handler", "risk": "Crash / data loss / 500 with stack trace exposure", "suggestion": "Wrap in try/catch and return { error: 'Failed to save email' } with 500"},
+    {"id": "FINDING-004", "dimension": "D7", "severity": "P0", "file": "src/app/[locale]/analyze/page.tsx", "line": 17, "description": "averageScore() divides by scores.length with no guard — returns NaN if experts object is empty; ScoreGauge renders broken arc", "risk": "Silent rendering failure on malformed AI response", "suggestion": "Add guard: if (scores.length === 0) return 0"},
+    {"id": "FINDING-015", "dimension": "D6", "severity": "P0", "file": "src/lib/encrypt.ts", "line": 4, "description": "Hardcoded fallback encryption key when SESSION_SECRET is unset — PostHog API keys encrypted with publicly known key", "risk": "Credential compromise if env var missing in staging/prod", "suggestion": "Throw error unconditionally if SESSION_SECRET not set; do not fall back silently"},
+    {"id": "FINDING-020", "dimension": "D9", "severity": "P0", "file": "src/app/api/email/route.ts", "line": 22, "description": "Email addresses (PII) collected via /api/email with no documented consent mechanism", "risk": "GDPR Article 6 violation — no lawful basis for PII collection", "suggestion": "Add explicit consent checkbox before email collection; document lawful basis"},
+    {"id": "FINDING-021", "dimension": "D9", "severity": "P0", "file": "src/app/", "line": 0, "description": "No cookie consent banner or opt-in mechanism exists anywhere in the application", "risk": "ePrivacy Directive / PECR compliance gap", "suggestion": "Implement cookie consent banner before any non-essential cookies are set"},
+    {"id": "FINDING-005", "dimension": "D2", "severity": "P1", "file": "src/app/api/email/route.ts", "line": 1, "description": "No authentication required on /api/email — anyone can associate arbitrary emails with any analysis slug", "risk": "Email harvesting / spam campaigns using analysis slugs", "suggestion": "Require authentication or add CAPTCHA to the email capture flow"},
+    {"id": "FINDING-006", "dimension": "D4", "severity": "P1", "file": "src/app/api/email/route.ts", "line": 1, "description": "No rate limiting on email capture endpoint", "risk": "Bulk email collection abuse", "suggestion": "Apply rate limiting (e.g., 3 captures per IP per hour)"},
+    {"id": "FINDING-007", "dimension": "D8", "severity": "P1", "file": "src/components/SignInModal.tsx", "line": 117, "description": "SignInModal label elements have no htmlFor attribute — inputs not programmatically associated", "risk": "Screen reader users cannot use sign-in form", "suggestion": "Add id attributes to all inputs; add matching htmlFor to all labels"},
+    {"id": "FINDING-008", "dimension": "D8", "severity": "P1", "file": "src/app/[locale]/settings/posthog/page.tsx", "line": 201, "description": "PostHog settings form labels lack htmlFor; inputs have no id attributes", "risk": "Screen reader users cannot use settings form", "suggestion": "Add id/htmlFor pairs to all form controls"},
+    {"id": "FINDING-009", "dimension": "D8", "severity": "P1", "file": "src/app/[locale]/analyze/page.tsx", "line": 233, "description": "Email capture input has no label element at all", "risk": "Screen readers cannot identify the field purpose", "suggestion": "Add visually-hidden <label> or aria-label to email capture input"},
+    {"id": "FINDING-010", "dimension": "D8", "severity": "P1", "file": "src/components/UserNav.tsx", "line": 91, "description": "Dropdown toggle button missing aria-expanded, aria-haspopup, aria-controls attributes", "risk": "Screen readers cannot interpret menu state", "suggestion": "Add aria-expanded={isOpen} aria-haspopup='menu' aria-controls='user-menu' to toggle button"},
+    {"id": "FINDING-011", "dimension": "D8", "severity": "P1", "file": "src/components/ExpertCard.tsx", "line": 86, "description": "Expert card expand/collapse button missing aria-expanded attribute", "risk": "Screen readers cannot determine expanded/collapsed state", "suggestion": "Add aria-expanded={isExpanded} to expand/collapse button"},
+    {"id": "FINDING-012", "dimension": "D8", "severity": "P1", "description": "No skip navigation link present anywhere in the application", "risk": "Keyboard users must tab through entire header on every page", "suggestion": "Add <a href='#main-content' className='sr-only focus:not-sr-only'>Skip to content</a> in layout"},
+    {"id": "FINDING-013", "dimension": "D8", "severity": "P1", "file": "src/app/[locale]/page.tsx", "line": 380, "description": "Error messages rendered as <p> elements not linked to inputs via aria-describedby", "risk": "Errors not announced to screen readers on form submission", "suggestion": "Add id to error elements; add aria-describedby={errorId} to corresponding inputs"},
+    {"id": "FINDING-014", "dimension": "D8", "severity": "P1", "file": "src/components/LoadingExpert.tsx", "line": 1, "description": "Loading progress list has no role='status' or aria-live region", "risk": "Screen readers cannot track analysis progress updates", "suggestion": "Wrap loading list in <div role='status' aria-live='polite'>"},
+    {"id": "FINDING-016", "dimension": "D9", "severity": "P1", "description": "OTP token value logged in plaintext in dev mode when RESEND_API_KEY is unset — affects misconfigured staging", "risk": "Authentication token exposure in log aggregation if staging misconfigured", "suggestion": "Mask OTP in logs: log only first+last digit or presence flag"},
+    {"id": "FINDING-022", "dimension": "D9", "severity": "P1", "description": "No data retention policies; AnalysisResult, EmailCapture, OtpToken accumulate indefinitely", "risk": "GDPR Article 5(1)(e) storage limitation principle violation", "suggestion": "Add cron job to purge records older than 90 days; add TTL index on OtpToken"},
+    {"id": "FINDING-023", "dimension": "D9", "severity": "P1", "description": "No right-to-erasure implementation; no API endpoint to delete user account or associated data", "risk": "GDPR Article 17 non-compliance", "suggestion": "Implement DELETE /api/auth/account endpoint that removes User, AnalysisResult, EmailCapture, PostHogConfig"},
+    {"id": "FINDING-025", "dimension": "D9", "severity": "P1", "file": "prisma/schema.prisma", "line": 29, "description": "IP addresses stored indefinitely in AnalysisResult without anonymization or retention limit", "risk": "GDPR personal data storage violation", "suggestion": "Anonymize IPs after 30 days (truncate last octet) or add to retention policy"},
+    {"id": "FINDING-028", "dimension": "D9", "severity": "P1", "file": "src/lib/encrypt.ts", "line": 12, "description": "AES-256-CBC used instead of authenticated AES-256-GCM for PostHog API key encryption", "risk": "Ciphertext integrity not guaranteed; padding oracle attack surface", "suggestion": "Migrate to AES-256-GCM or ChaCha20-Poly1305; re-encrypt all stored keys"},
+    {"id": "FINDING-029", "dimension": "D10", "severity": "P1", "file": "src/lib/logger.ts", "line": 1, "description": "Structured JSON logging lacks correlation/request IDs — impossible to trace a single request across log lines", "risk": "Incident investigation significantly harder", "suggestion": "Generate requestId in middleware; pass to all log calls via AsyncLocalStorage"},
+    {"id": "FINDING-030", "dimension": "D10", "severity": "P2", "description": "No error tracking service (Sentry/Bugsnag) integrated — production errors invisible without active log monitoring", "risk": "Production errors go unnoticed", "suggestion": "Integrate Sentry with Next.js; capture unhandled exceptions and route errors"},
+    {"id": "FINDING-031", "dimension": "D10", "severity": "P2", "description": "No metrics exposition — no Prometheus endpoint, StatsD client, or business KPI counters", "risk": "No real-time operational visibility or SLO monitoring", "suggestion": "Add /api/metrics endpoint with analysis count, error rate, rate-limit hits"},
+    {"id": "FINDING-033", "dimension": "D10", "severity": "P2", "description": "No alerting rules or SLO definitions exist in repository", "risk": "Incidents not auto-detected; on-call has no automated notification", "suggestion": "Define error rate and latency SLOs; set up alerting in monitoring platform"}
+  ],
+  "scores": {
+    "D1": 57.1, "D2": 58.3, "D3": 66.7, "D4": 64.3,
+    "D5": 58.3, "D6": 66.7, "D7": 50.0, "D8": 7.1,
+    "D9": 7.1, "D10": 14.3
+  },
+  "overall": 45.0,
+  "gate": "BLOCKED",
+  "p0Findings": ["FINDING-001","FINDING-002","FINDING-003","FINDING-004","FINDING-015","FINDING-020","FINDING-021"],
+  "p1Findings": ["FINDING-005","FINDING-006","FINDING-007","FINDING-008","FINDING-009","FINDING-010","FINDING-011","FINDING-012","FINDING-013","FINDING-014","FINDING-016","FINDING-022","FINDING-023","FINDING-025","FINDING-028","FINDING-029"],
+  "testCoverage": {
+    "D1": {"level": "ZERO", "count": 0, "gaps": "Entire frontend untested — no component, page, or navigation tests"},
+    "D2": {"level": "STRONG", "count": 87, "gaps": "No response header tests, no concurrent request tests"},
+    "D3": {"level": "ZERO", "count": 0, "gaps": "No timing, caching, load, or N+1 query tests"},
+    "D4": {"level": "STRONG", "count": 27, "gaps": "No CSRF, horizontal privilege escalation, or prompt injection tests"},
+    "D5": {"level": "MODERATE", "count": 10, "gaps": "No constraint violation, transaction rollback, or DB unavailable tests"},
+    "D6": {"level": "WEAK", "count": 3, "gaps": "Only health endpoint and provider key tests; no env config, migration, or startup tests"},
+    "D7": {"level": "STRONG", "count": 36, "gaps": "No extremely long input, binary content, or bulk all-fail tests"},
+    "D8": {"level": "ZERO", "count": 0, "gaps": "No accessibility tests whatsoever"},
+    "D9": {"level": "ZERO", "count": 0, "gaps": "No consent, privacy, retention, or audit tests"},
+    "D10": {"level": "ZERO", "count": 0, "gaps": "No logging, metrics, or monitoring tests"}
+  }
+}

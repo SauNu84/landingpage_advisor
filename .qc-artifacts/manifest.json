@@ -9,6 +9,114 @@
         "command": "qc-run",
         "path": "results/run-full-2026-03-22.md"
       }
+    ],
+    "reports": [
+      {
+        "id": "pipeline-full-20260323",
+        "date": "2026-03-23",
+        "module": "full",
+        "command": "qc-pipeline:phase5",
+        "path": "results/pipeline-full-2026-03-23.md",
+        "htmlPath": "results/pipeline-full-2026-03-23.html",
+        "gate": "CONDITIONAL",
+        "compositeOverall": 62.4,
+        "p0Count": 7,
+        "p1Count": 16
+      }
+    ],
+    "tests": [
+      {
+        "id": "gen-full-2026-03-23",
+        "date": "2026-03-23",
+        "module": "full",
+        "mode": "findings",
+        "command": "qc-gen",
+        "path": "tests/gen-full-2026-03-23.json",
+        "totalFiles": 4,
+        "totalTests": 55,
+        "files": [
+          ".qc-artifacts/scripts/d4-security.gen.test.ts",
+          ".qc-artifacts/scripts/d7-edge-cases.gen.test.ts",
+          ".qc-artifacts/scripts/d9-compliance.gen.test.ts",
+          ".qc-artifacts/scripts/d10-observability.gen.test.ts"
+        ]
+      }
+    ],
+    "executions": [
+      {
+        "id": "exec-full-2026-03-23",
+        "date": "2026-03-23",
+        "module": "full",
+        "runner": "jest",
+        "phase": "PRISM-Phase4",
+        "path": "results/exec-full-2026-03-23.json",
+        "total": 290,
+        "passed": 290,
+        "failed": 0,
+        "overall": 62.4,
+        "gate": "CONDITIONAL",
+        "playwrightRan": false
+      }
+    ],
+    "e2e": [
+      {
+        "id": "e2e-ui-2026-03-23",
+        "date": "2026-03-23",
+        "type": "playwright",
+        "phase": "3b",
+        "path": "tests/e2e-ui-2026-03-23.json",
+        "configFile": "playwright.config.ts",
+        "testDir": ".qc-artifacts/scripts",
+        "testMatch": "**/*.e2e-ui.gen.spec.ts",
+        "flows": 5,
+        "totalTests": 60,
+        "playwrightInstalled": false,
+        "notes": "Run: npm install --save-dev @playwright/test && npm run dev && npx playwright test"
+      },
+      {
+        "id": "e2e-full-2026-03-23",
+        "date": "2026-03-23",
+        "phase": "PRISM-Phase3",
+        "generator": "claude-sonnet-4-6",
+        "metadataPath": "tests/e2e-full-2026-03-23.json",
+        "workflows": [
+          {
+            "id": "auth-flow",
+            "dimensions": ["D2", "D4"],
+            "file": "scripts/auth-flow.e2e.gen.test.ts",
+            "steps": 5,
+            "tests": 13
+          },
+          {
+            "id": "analysis-lifecycle",
+            "dimensions": ["D2", "D5"],
+            "file": "scripts/analysis-lifecycle.e2e.gen.test.ts",
+            "steps": 4,
+            "tests": 17
+          },
+          {
+            "id": "posthog-settings-crud",
+            "dimensions": ["D2", "D4", "D5"],
+            "file": "scripts/posthog-settings-crud.e2e.gen.test.ts",
+            "steps": 6,
+            "tests": 21
+          },
+          {
+            "id": "rate-limit-enforcement",
+            "dimensions": ["D4", "D7"],
+            "file": "scripts/rate-limit-enforcement.e2e.gen.test.ts",
+            "steps": 3,
+            "tests": 18
+          }
+        ],
+        "summary": {
+          "totalWorkflows": 4,
+          "totalTests": 69,
+          "endpointsCovered": 13,
+          "totalEndpoints": 16,
+          "coveragePercent": 81
+        }
+      }
     ]
   }
 }

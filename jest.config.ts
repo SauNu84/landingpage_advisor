@@ -15,7 +15,7 @@ const config: Config = {
   transformIgnorePatterns: [
     "/node_modules/(?!(nanoid|jose)/)",
   ],
-  testMatch: ["**/__tests__/**/*.test.ts"],
+  testMatch: ["**/__tests__/**/*.test.ts", "**/.qc-artifacts/scripts/**/*.gen.test.ts"],
   collectCoverageFrom: [
     "src/lib/**/*.ts",
     "src/app/api/**/*.ts",

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRISM Pipeline Report — Landing Page Advisor — 2026-03-23</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117;
+      --bg2: #161b22;
+      --bg3: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text2: #8b949e;
+      --green: #3fb950;
+      --yellow: #d29922;
+      --red: #f85149;
+      --blue: #58a6ff;
+      --purple: #bc8cff;
+      --orange: #e3b341;
+      --accent: #1f6feb;
+    }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; }
+    a { color: var(--blue); text-decoration: none; }
+    h1, h2, h3, h4 { font-weight: 600; }
+    h1 { font-size: 1.6rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.2rem; margin: 2rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; color: var(--blue); }
+    h3 { font-size: 1rem; margin: 1.25rem 0 0.5rem; color: var(--orange); }
+    h4 { font-size: 0.9rem; margin: 1rem 0 0.4rem; color: var(--text2); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .header { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+    .header p { color: var(--text2); font-size: 0.85rem; margin-top: 0.25rem; }
+    .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .meta-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+    .meta-card .label { font-size: 0.75rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; }
+    .meta-card .value { font-size: 1.1rem; font-weight: 600; margin-top: 0.25rem; }
+    .gate-badge { display: inline-block; padding: 0.4rem 1.2rem; border-radius: 20px; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.05em; }
+    .gate-conditional { background: rgba(210,153,34,0.2); color: var(--orange); border: 2px solid var(--orange); }
+    .gate-blocked { background: rgba(248,81,73,0.2); color: var(--red); border: 2px solid var(--red); }
+    .gate-pass { background: rgba(63,185,80,0.2); color: var(--green); border: 2px solid var(--green); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { background: var(--bg3); color: var(--text2); text-align: left; padding: 0.5rem 0.75rem; border: 1px solid var(--border); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .red { color: var(--red); }
+    .yellow { color: var(--yellow); }
+    .green { color: var(--green); }
+    .orange { color: var(--orange); }
+    .text2 { color: var(--text2); }
+    .mono { font-family: 'SF Mono', Consolas, monospace; font-size: 0.8rem; }
+    .p0-row td { border-left: 3px solid var(--red); }
+    .p1-row td { border-left: 3px solid var(--yellow); }
+    .phase-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1rem 0; }
+    .phase-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+    .phase-card .phase-num { font-size: 0.7rem; color: var(--text2); text-transform: uppercase; }
+    .phase-card .phase-name { font-weight: 600; margin: 0.2rem 0; }
+    .phase-card .phase-status { font-size: 0.75rem; font-weight: 600; }
+    .phase-card .phase-detail { font-size: 0.8rem; color: var(--text2); margin-top: 0.3rem; }
+    .status-complete { color: var(--green); }
+    .status-scaffolded { color: var(--yellow); }
+    .bar-chart { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1rem 0; font-family: 'SF Mono', Consolas, monospace; font-size: 0.82rem; }
+    .bar-row { display: flex; align-items: center; margin-bottom: 0.6rem; gap: 0.75rem; }
+    .bar-label { width: 200px; flex-shrink: 0; font-size: 0.8rem; }
+    .bar-track { flex: 1; height: 16px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+    .bar-fill-red { background: linear-gradient(90deg, #f85149, #c84040); }
+    .bar-fill-yellow { background: linear-gradient(90deg, #d29922, #a07010); }
+    .bar-fill-green { background: linear-gradient(90deg, #3fb950, #2d8a3a); }
+    .bar-score { width: 70px; flex-shrink: 0; text-align: right; font-weight: 600; font-size: 0.82rem; }
+    .bar-emoji { width: 20px; flex-shrink: 0; }
+    details { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.75rem; }
+    summary { padding: 0.75rem 1rem; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; list-style: none; background: var(--bg2); border-radius: 8px; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: '▶'; font-size: 0.7rem; color: var(--text2); transition: transform 0.2s; }
+    details[open] summary::before { transform: rotate(90deg); }
+    details[open] summary { border-radius: 8px 8px 0 0; }
+    .details-body { padding: 1rem; }
+    .check-item { display: flex; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .check-item:last-child { border-bottom: none; }
+    .check-icon { width: 20px; flex-shrink: 0; font-size: 1rem; }
+    .check-text { flex: 1; }
+    .check-text .check-title { font-weight: 500; }
+    .check-text .check-detail { color: var(--text2); font-size: 0.8rem; margin-top: 0.2rem; }
+    .check-text .check-file { font-family: 'SF Mono', Consolas, monospace; color: var(--blue); font-size: 0.78rem; }
+    .dim-score-badge { margin-left: auto; flex-shrink: 0; font-size: 0.78rem; font-weight: 700; padding: 0.1rem 0.5rem; border-radius: 4px; }
+    .trend-up { color: var(--green); }
+    .trend-down { color: var(--red); }
+    .trend-neutral { color: var(--text2); }
+    .section { margin-bottom: 2rem; }
+    code { font-family: 'SF Mono', Consolas, monospace; background: var(--bg3); padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.82em; }
+    .overall-banner { background: var(--bg2); border: 2px solid var(--yellow); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; display: flex; align-items: center; gap: 1.5rem; }
+    .overall-score { font-size: 3rem; font-weight: 700; color: var(--orange); line-height: 1; }
+    .overall-detail { flex: 1; }
+    .overall-detail .gate-label { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .overall-detail p { color: var(--text2); font-size: 0.85rem; }
+    .tag { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 3px; margin-right: 0.3rem; }
+    .tag-p0 { background: rgba(248,81,73,0.25); color: var(--red); }
+    .tag-p1 { background: rgba(210,153,34,0.25); color: var(--yellow); }
+    .tag-p2 { background: rgba(88,166,255,0.25); color: var(--blue); }
+    footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); color: var(--text2); font-size: 0.78rem; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>PRISM Pipeline Report</h1>
+    <p>Landing Page Advisor — Full Application Quality Analysis</p>
+    <p style="margin-top:0.5rem;">
+      <span class="gate-badge gate-conditional">CONDITIONAL</span>
+      &nbsp;&nbsp;
+      <span class="text2">Generated 2026-03-23 &nbsp;|&nbsp; claude-sonnet-4-6 &nbsp;|&nbsp; qc-pipeline phases 1–5</span>
+    </p>
+  </div>
+
+  <!-- META CARDS -->
+  <div class="meta-grid">
+    <div class="meta-card">
+      <div class="label">Scope</div>
+      <div class="value">Full Application</div>
+    </div>
+    <div class="meta-card">
+      <div class="label">Files Analyzed</div>
+      <div class="value">68 files</div>
+    </div>
+    <div class="meta-card">
+      <div class="label">Lines of Code</div>
+      <div class="value">~3,800</div>
+    </div>
+    <div class="meta-card">
+      <div class="label">Date</div>
+      <div class="value">2026-03-23</div>
+    </div>
+    <div class="meta-card">
+      <div class="label">Jest Duration</div>
+      <div class="value">4,039 ms</div>
+    </div>
+    <div class="meta-card">
+      <div class="label">Tests Executed</div>
+      <div class="value">290 / 290 ✓</div>
+    </div>
+    <div class="meta-card">
+      <div class="label">P0 Findings</div>
+      <div class="value red">7</div>
+    </div>
+    <div class="meta-card">
+      <div class="label">P1 Findings</div>
+      <div class="value yellow">16</div>
+    </div>
+  </div>
+
+  <!-- OVERALL SCORE BANNER -->
+  <div class="overall-banner">
+    <div class="overall-score">62.4%</div>
+    <div class="overall-detail">
+      <div class="gate-label">Gate: <span class="orange">CONDITIONAL</span></div>
+      <p>6 of 10 dimensions below 70% threshold. 7 P0 findings unresolved. Test suite: 290/290 passed (100%).
+      Improvement of +15.4 points vs prior run (47.0% → 62.4%). Do not release until all P0 items resolved.</p>
+    </div>
+  </div>
+
+  <!-- PHASE SUMMARY -->
+  <h2>Phase Summary</h2>
+  <div class="phase-cards">
+    <div class="phase-card">
+      <div class="phase-num">Phase 1</div>
+      <div class="phase-name">Static Analysis</div>
+      <div class="phase-status status-complete">COMPLETE</div>
+      <div class="phase-detail">68 files, 35 findings (7 P0, 16 P1, 12 P2), 10 dimensions scored</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 2</div>
+      <div class="phase-name">Test Generation (Findings-Driven)</div>
+      <div class="phase-status status-complete">COMPLETE</div>
+      <div class="phase-detail">4 generated test files, 55 tests — D4, D7, D9, D10 targeted</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 3</div>
+      <div class="phase-name">E2E Workflow Tests</div>
+      <div class="phase-status status-complete">COMPLETE</div>
+      <div class="phase-detail">4 workflow files, 72 executed tests, 13/16 endpoints (81%)</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 3b</div>
+      <div class="phase-name">Playwright UI Tests</div>
+      <div class="phase-status status-scaffolded">SCAFFOLDED</div>
+      <div class="phase-detail">5 spec files + fixture, 60 tests — requires <code>npm install @playwright/test</code> + live server</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 4</div>
+      <div class="phase-name">Test Execution</div>
+      <div class="phase-status status-complete">COMPLETE</div>
+      <div class="phase-detail">290/290 passed, 0 failed, 4,039ms — Jest (163 hand-written + 55 generated + 72 E2E)</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 5</div>
+      <div class="phase-name">Final Report</div>
+      <div class="phase-status status-complete">COMPLETE</div>
+      <div class="phase-detail">pipeline-full-2026-03-23.md + pipeline-full-2026-03-23.html</div>
+    </div>
+  </div>
+
+  <!-- COMPOSITE SCORES BAR CHART -->
+  <h2>Composite Quality Scores</h2>
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">D1 &nbsp;UI/UX</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:57.1%"></div></div>
+      <div class="bar-score red">57.1%</div>
+      <div class="bar-emoji">🔴</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">D2 &nbsp;API</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-yellow" style="width:79.2%"></div></div>
+      <div class="bar-score yellow">79.2%</div>
+      <div class="bar-emoji">🟡</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">D3 &nbsp;Performance</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:66.7%"></div></div>
+      <div class="bar-score red">66.7%</div>
+      <div class="bar-emoji">🔴</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">D4 &nbsp;Security</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-yellow" style="width:82.2%"></div></div>
+      <div class="bar-score yellow">82.2%</div>
+      <div class="bar-emoji">🟡</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">D5 &nbsp;Data Integrity</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-yellow" style="width:79.2%"></div></div>
+      <div class="bar-score yellow">79.2%</div>
+      <div class="bar-emoji">🟡</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">D6 &nbsp;Infrastructure</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:66.7%"></div></div>
+      <div class="bar-score red">66.7%</div>
+      <div class="bar-emoji">🔴</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">D7 &nbsp;Edge Cases</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-yellow" style="width:75.0%"></div></div>
+      <div class="bar-score yellow">75.0%</div>
+      <div class="bar-emoji">🟡</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">D8 &nbsp;Accessibility</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:7.1%"></div></div>
+      <div class="bar-score red">7.1%</div>
+      <div class="bar-emoji">🔴</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">D9 &nbsp;Compliance</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:53.6%"></div></div>
+      <div class="bar-score red">53.6%</div>
+      <div class="bar-emoji">🔴</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">D10 Observability</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:57.2%"></div></div>
+      <div class="bar-score red">57.2%</div>
+      <div class="bar-emoji">🔴</div>
+    </div>
+    <div style="border-top:1px solid var(--border); margin: 0.75rem 0;"></div>
+    <div class="bar-row">
+      <div class="bar-label"><strong>OVERALL</strong></div>
+      <div class="bar-track"><div class="bar-fill bar-fill-red" style="width:62.4%"></div></div>
+      <div class="bar-score red"><strong>62.4%</strong></div>
+      <div class="bar-emoji">🔴</div>
+    </div>
+    <div style="margin-top:0.75rem; font-size:0.75rem; color:var(--text2);">
+      Legend: 🟢 &ge;85% &nbsp; 🟡 70–84% &nbsp; 🔴 &lt;70% &nbsp;&nbsp; Composite = (static + exec) / 2 where exec tests exist; otherwise static only.
+    </div>
+  </div>
+
+  <!-- SCORE BREAKDOWN TABLE -->
+  <h2>Score Breakdown</h2>
+  <table>
+    <thead>
+      <tr><th>Dimension</th><th>Static Score</th><th>Exec Score</th><th>Composite</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>D1 — UI/UX</td><td>57.1%</td><td class="text2">N/A</td><td class="red">57.1%</td><td>🔴</td></tr>
+      <tr><td>D2 — API</td><td>58.3%</td><td class="green">100.0%</td><td class="yellow">79.2%</td><td>🟡</td></tr>
+      <tr><td>D3 — Performance</td><td>66.7%</td><td class="text2">N/A</td><td class="red">66.7%</td><td>🔴</td></tr>
+      <tr><td>D4 — Security</td><td>64.3%</td><td class="green">100.0%</td><td class="yellow">82.2%</td><td>🟡</td></tr>
+      <tr><td>D5 — Data Integrity</td><td>58.3%</td><td class="green">100.0%</td><td class="yellow">79.2%</td><td>🟡</td></tr>
+      <tr><td>D6 — Infrastructure</td><td>66.7%</td><td class="text2">N/A</td><td class="red">66.7%</td><td>🔴</td></tr>
+      <tr><td>D7 — Edge Cases</td><td>50.0%</td><td class="green">100.0%</td><td class="yellow">75.0%</td><td>🟡</td></tr>
+      <tr><td>D8 — Accessibility</td><td>7.1%</td><td class="text2">N/A</td><td class="red">7.1%</td><td>🔴</td></tr>
+      <tr><td>D9 — Compliance &amp; Privacy</td><td>7.1%</td><td class="green">100.0%</td><td class="red">53.6%</td><td>🔴</td></tr>
+      <tr><td>D10 — Observability</td><td>14.3%</td><td class="green">100.0%</td><td class="red">57.2%</td><td>🔴</td></tr>
+      <tr style="font-weight:700;"><td><strong>Overall</strong></td><td>45.0%</td><td class="green">100.0%</td><td class="red">62.4%</td><td>🔴</td></tr>
+    </tbody>
+  </table>
+
+  <!-- DIMENSION DETAILS (collapsible) -->
+  <h2>Findings by Dimension</h2>
+
+  <!-- D1 -->
+  <details>
+    <summary>D1 — UI/UX <span class="dim-score-badge" style="background:rgba(248,81,73,0.2);color:var(--red);">57.1% 🔴</span></summary>
+    <div class="details-body">
+      <div class="check-item">
+        <div class="check-icon">✅</div>
+        <div class="check-text">
+          <div class="check-title">Navigation: all pages reachable, back works</div>
+          <div class="check-detail">All pages have router.push('/') or Link back navigation</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">⚠️</div>
+        <div class="check-text">
+          <div class="check-title">Responsive: mobile 375px / tablet 768px / desktop 1440px</div>
+          <div class="check-file">src/components/BulkReportView.tsx:143</div>
+          <div class="check-detail">Tailwind breakpoints used throughout; BulkReportView ranking table may overflow at 375px</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">⚠️</div>
+        <div class="check-text">
+          <div class="check-title">Loading states: skeleton/spinner on async ops</div>
+          <div class="check-file">src/app/[locale]/history/page.tsx:86</div>
+          <div class="check-detail">Most pages use spinners; history page uses text-only 'loading' state with no skeleton</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">⚠️</div>
+        <div class="check-text">
+          <div class="check-title">Empty states: no data, first use, no search results</div>
+          <div class="check-file">src/components/BulkReportView.tsx:63</div>
+          <div class="check-detail">History has empty state; BulkReportView renders empty table with no message if results array is empty</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">⚠️</div>
+        <div class="check-text">
+          <div class="check-title">Form behavior: validation, error messages, tab order</div>
+          <div class="check-file">src/app/[locale]/analyze/page.tsx:233</div>
+          <div class="check-detail">URL/email/OTP validated with inline errors; email capture input lacks id/label association</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">⚠️</div>
+        <div class="check-text">
+          <div class="check-title">Interactive states: hover, focus, active, disabled, loading, error</div>
+          <div class="check-file">src/components/UserNav.tsx:91</div>
+          <div class="check-detail">Buttons have hover/disabled states; UserNav dropdown missing aria-expanded/aria-haspopup</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">⚠️</div>
+        <div class="check-text">
+          <div class="check-title">Feedback: success/error notifications after actions</div>
+          <div class="check-file">src/components/UserNav.tsx:63</div>
+          <div class="check-detail">Most actions provide feedback; sign-out silently closes menu with no confirmation</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- D2 -->
+  <details>
+    <summary>D2 — API <span class="dim-score-badge" style="background:rgba(210,153,34,0.2);color:var(--yellow);">79.2% 🟡</span></summary>
+    <div class="details-body">
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Route definitions match expected CRUD operations</div><div class="check-detail">All 14 endpoints cover expected CRUD patterns for the domain</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Status codes: correct codes for success, client error, server error</div><div class="check-file">src/app/api/email/route.ts:22</div><div class="check-detail">All routes correct; /api/email has no try/catch so DB failure returns unhandled 500</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Input validation: request body/params validated before processing</div><div class="check-file">src/app/api/auth/request-otp/route.ts:18</div><div class="check-detail">All routes validate input; email validation uses only includes('@') — accepts malformed emails</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Error responses: consistent format with message</div><div class="check-file">src/app/api/email/route.ts:22</div><div class="check-detail">All routes use {error:'...'} format except /api/email which can crash without error response</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Pagination: offset/limit/sorting for list endpoints</div><div class="check-detail">/api/history uses cursor-based pagination with PAGE_SIZE=20, hasMore, nextCursor</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Idempotency: duplicate requests handled safely</div><div class="check-file">src/app/api/email/route.ts:22</div><div class="check-detail">Auth and settings use upsert correctly; email capture allows duplicate rows</div></div></div>
+    </div>
+  </details>
+
+  <!-- D3 -->
+  <details>
+    <summary>D3 — Performance <span class="dim-score-badge" style="background:rgba(248,81,73,0.2);color:var(--red);">66.7% 🔴</span></summary>
+    <div class="details-body">
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">N+1 queries: no loops with DB calls inside</div><div class="check-detail">Promise.all used for parallel AI calls; no DB calls inside loops found</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Indexes: queries use indexed columns</div><div class="check-file">src/lib/rate-limit.ts:20</div><div class="check-detail">userId and ip indexed separately; no composite index on (userId,createdAt) or (ip,createdAt)</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Payload size: responses don't return unnecessary data</div><div class="check-file">src/app/api/history/route.ts:36</div><div class="check-detail">History parses full multi-KB JSON blob per record just to extract scores — wastes memory</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Async operations: long tasks don't block request</div><div class="check-detail">All AI calls and scraping are properly async/await with Promise.all parallelism</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Caching: repeated lookups cached where appropriate</div><div class="check-file">src/app/api/analyze/route.ts:180</div><div class="check-detail">PostHog config queried from DB on every authenticated analysis with no caching layer</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Bundle: no unnecessary imports inflating size</div><div class="check-detail">Resend SDK dynamically imported in email.ts; cheerio externalized in next.config.mjs</div></div></div>
+    </div>
+  </details>
+
+  <!-- D4 -->
+  <details>
+    <summary>D4 — Security <span class="dim-score-badge" style="background:rgba(210,153,34,0.2);color:var(--yellow);">82.2% 🟡</span></summary>
+    <div class="details-body">
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Authentication: all routes behind auth middleware</div><div class="check-file">src/app/api/email/route.ts:1</div><div class="check-detail">History/results/settings auth-gated; analyze/bulk/compare open by design; email endpoint unauthenticated</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Authorization: RBAC checks per endpoint</div><div class="check-detail">History and settings scoped to session.userId; shared results public by design</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Input sanitization: user input escaped/validated</div><div class="check-file">src/app/api/analyze/route.ts:146</div><div class="check-detail">URLs validated via new URL(); emails trimmed/lowercased; scraped content passed to LLM without sanitization (prompt injection risk)</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">No data exposure: API doesn't leak sensitive fields</div><div class="check-file">src/app/api/results/[slug]/route.ts:17</div><div class="check-detail">Auth/me returns only id+email; PostHog key masked; shared results include liveData from user's private PostHog account</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Rate limiting: abuse prevention on sensitive endpoints</div><div class="check-file">src/app/api/auth/request-otp/route.ts:1</div><div class="check-detail"><strong class="red">P0:</strong> Analyze/bulk/compare rate-limited; OTP request/verify endpoints have NO rate limiting — brute-force OTP possible</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Secrets: no hardcoded credentials, env vars used</div><div class="check-detail">All API keys from process.env; PostHog keys encrypted at rest</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">SQL injection: parameterized queries</div><div class="check-detail">All DB access via Prisma ORM; no raw SQL found</div></div></div>
+    </div>
+  </details>
+
+  <!-- D5 -->
+  <details>
+    <summary>D5 — Data Integrity <span class="dim-score-badge" style="background:rgba(210,153,34,0.2);color:var(--yellow);">79.2% 🟡</span></summary>
+    <div class="details-body">
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">CRUD lifecycle: create/read/update/delete all consistent</div><div class="check-file">src/app/api/results/route.ts:26</div><div class="check-detail">Core CRUD consistent; /api/results POST omits ip field; no User/EmailCapture delete endpoints</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Foreign keys: relations enforced at DB level</div><div class="check-file">prisma/schema.prisma:45</div><div class="check-detail">Most FKs enforced; EmailCapture.slug has no FK to AnalysisResult — orphans possible on delete</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Unique constraints: duplicates prevented</div><div class="check-detail">slug unique, email unique, [slug,email] unique on EmailCapture, userId unique on PostHogConfig</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Cascade behavior: deletes don't orphan data</div><div class="check-file">prisma/schema.prisma:45</div><div class="check-detail">Deleting AnalysisResult leaves EmailCapture rows orphaned; OtpToken records accumulate indefinitely with no cleanup</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Transaction usage: multi-step writes wrapped in transactions</div><div class="check-file">src/app/api/auth/request-otp/route.ts:27</div><div class="check-detail">verify-otp correctly uses $transaction; request-otp 3-step write (upsert+updateMany+create) is NOT transactional</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Validation: business rules enforced before DB write</div><div class="check-detail">URL, email, OTP, and field validation in all routes before DB operations</div></div></div>
+    </div>
+  </details>
+
+  <!-- D6 -->
+  <details>
+    <summary>D6 — Infrastructure <span class="dim-score-badge" style="background:rgba(248,81,73,0.2);color:var(--red);">66.7% 🔴</span></summary>
+    <div class="details-body">
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Health checks: app has liveness/readiness indicators</div><div class="check-file">src/app/api/health/route.ts:1</div><div class="check-detail">Health endpoint exists and returns 200; does not check DB connectivity or AI provider key presence</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Environment config: env vars for all environment-specific values</div><div class="check-detail">All secrets from process.env; SESSION_SECRET missing from .env.local.example — likely omitted in new deployments</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Logging: errors and key operations logged</div><div class="check-detail">Structured JSON logger used in all API routes for errors and key operations</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Error recovery: uncaught exceptions don't crash server</div><div class="check-detail">Try/catch in all route handlers; Next.js catches unhandled route exceptions</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">Migration safety: schema changes are additive/safe</div><div class="check-detail">All 3 migrations verified additive-only; migration 3 uses safe SQLite table-redefinition pattern</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Docker: services properly containerized</div><div class="check-detail">No Dockerfile, docker-compose.yml, or .dockerignore found in repository</div></div></div>
+    </div>
+  </details>
+
+  <!-- D7 -->
+  <details>
+    <summary>D7 — Edge Cases <span class="dim-score-badge" style="background:rgba(210,153,34,0.2);color:var(--yellow);">75.0% 🟡</span></summary>
+    <div class="details-body">
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Null/undefined: handled in inputs and DB results</div><div class="check-file">src/app/[locale]/analyze/page.tsx:17</div><div class="check-detail">Most null checks present; averageScore() divides by scores.length with no guard — returns NaN if experts object is empty</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Boundary values: min/max/overflow tested</div><div class="check-file">src/components/ScoreGauge.tsx:25</div><div class="check-detail">Bulk min/max enforced; ScoreGauge does not clamp score to 0–100 — overflowing arc on malformed AI response</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Concurrent operations: race conditions addressed</div><div class="check-file">src/lib/rate-limit.ts:13</div><div class="check-detail">verify-otp uses transaction; rate-limit check is non-atomic (read-then-compare); request-otp OTP creation not transactional</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Network failure: timeouts and retries for external calls</div><div class="check-file">src/lib/scraper.ts:39</div><div class="check-detail">Scraper has 15s AbortSignal timeout; AI provider calls have no explicit timeout — can hang indefinitely</div></div></div>
+      <div class="check-item"><div class="check-icon">✅</div><div class="check-text"><div class="check-title">State transitions: invalid state changes rejected</div><div class="check-detail">OTP can only be verified once; session cleared atomically on signout; bulk returns 502 if all analyses fail</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Graceful degradation: partial failures don't cascade</div><div class="check-file">src/app/api/email/route.ts:22</div><div class="check-detail">Bulk uses allSettled (good); PostHog enrichment failures caught gracefully; /api/email has no try/catch and will crash on DB failure</div></div></div>
+    </div>
+  </details>
+
+  <!-- D8 -->
+  <details>
+    <summary>D8 — Accessibility <span class="dim-score-badge" style="background:rgba(248,81,73,0.2);color:var(--red);">7.1% 🔴</span></summary>
+    <div class="details-body">
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">ARIA: roles, labels, states on interactive elements</div><div class="check-file">src/components/UserNav.tsx:91, src/components/ExpertCard.tsx:86, src/components/LoadingExpert.tsx:1</div><div class="check-detail">SignInModal has role=dialog; UserNav dropdown missing aria-expanded/aria-haspopup; ExpertCard expand button missing aria-expanded; LoadingExpert has no aria-live region</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Keyboard: all actions reachable via keyboard alone</div><div class="check-file">src/components/UserNav.tsx:53</div><div class="check-detail">All elements are native button/link; UserNav dropdown Escape key not handled; SignInModal no Escape handler</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Focus: visible focus indicators, logical order</div><div class="check-file">src/components/UserNav.tsx:53</div><div class="check-detail">Inputs have focus:ring-2; SignInModal uses FocusTrap; UserNav dropdown has no focus trap</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Color contrast: text &ge; 4.5:1, large text &ge; 3:1</div><div class="check-detail">text-gray-400 on white (#9ca3af) = 2.85:1 (FAILS AA); amber score color (#f59e0b) on white = 2.4:1 (FAILS AA)</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Screen reader: logical content order, decorative images hidden</div><div class="check-file">src/app/[locale]/page.tsx:289</div><div class="check-detail">All decorative SVG icons lack aria-hidden=true; emoji icons in expert cards rendered without aria-hidden</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Forms: all inputs labeled, errors announced</div><div class="check-file">src/components/SignInModal.tsx:117, src/app/[locale]/settings/posthog/page.tsx:201</div><div class="check-detail">SignInModal labels lack htmlFor; PostHog settings labels lack htmlFor; email capture has no label; errors not linked via aria-describedby</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Skip links: bypass navigation available</div><div class="check-detail">No skip navigation link found anywhere in the application</div></div></div>
+    </div>
+  </details>
+
+  <!-- D9 -->
+  <details>
+    <summary>D9 — Compliance &amp; Privacy <span class="dim-score-badge" style="background:rgba(248,81,73,0.2);color:var(--red);">53.6% 🔴</span></summary>
+    <div class="details-body">
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Consent: obtained before collecting PII</div><div class="check-file">src/app/api/email/route.ts:22</div><div class="check-detail"><strong class="red">P0 — GDPR Art. 6:</strong> Email addresses collected via /api/email with no documented consent mechanism or privacy notice</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Retention: policies defined and enforced</div><div class="check-detail">No retention policies defined; AnalysisResult, EmailCapture, OtpToken, PostHogConfig accumulate indefinitely — GDPR Art. 5(1)(e)</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Right to delete: user data purgeable on request</div><div class="check-detail">No user account deletion endpoint; no erasure tooling; PostHogConfig DELETE exists but doesn't delete the user — GDPR Art. 17</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Audit logging: sensitive operations logged</div><div class="check-detail">No audit log for auth events, config changes, or data access — only operational stdout logging</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Cookie consent: tracking cookies require opt-in</div><div class="check-detail"><strong class="red">P0 — ePrivacy/PECR:</strong> No cookie consent banner or opt-in mechanism found anywhere in the codebase</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Encryption: PII encrypted at rest and in transit</div><div class="check-file">src/lib/encrypt.ts:12</div><div class="check-detail">PostHog keys encrypted with AES-256-CBC (should be GCM); fallback hardcoded key if SESSION_SECRET unset; IP addresses stored in plaintext</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Third-party: data sharing agreements documented</div><div class="check-detail">No documented DPA with PostHog, Resend, or AI providers (Anthropic/OpenAI) as sub-processors</div></div></div>
+    </div>
+  </details>
+
+  <!-- D10 -->
+  <details>
+    <summary>D10 — Observability <span class="dim-score-badge" style="background:rgba(248,81,73,0.2);color:var(--red);">57.2% 🔴</span></summary>
+    <div class="details-body">
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Structured logging: JSON format with correlation IDs</div><div class="check-file">src/lib/logger.ts:1</div><div class="check-detail">JSON structured logging with timestamp/level/module/message; no requestId or traceId for request correlation</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Error tracking: captured with stack traces and context</div><div class="check-file">src/lib/logger.ts:39</div><div class="check-detail">Errors logged with stack traces to stdout; no error tracking service (Sentry/Bugsnag) for aggregation/alerting</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Metrics: business and technical KPIs exposed</div><div class="check-detail">No metrics endpoint; no StatsD/Prometheus client; no business KPI counters (analyses/day, error rate, rate-limit hit rate)</div></div></div>
+      <div class="check-item"><div class="check-icon">⚠️</div><div class="check-text"><div class="check-title">Health endpoints: liveness and readiness probes</div><div class="check-file">src/app/api/health/route.ts:1</div><div class="check-detail">Liveness endpoint exists (/api/health); no readiness check with DB/provider dependency validation</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Alerting: defined for SLO violations</div><div class="check-detail">No alerting rules, PagerDuty/OpsGenie configs, or SLO definitions found in repository</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Tracing: distributed traces for cross-service requests</div><div class="check-detail">No OpenTelemetry or distributed tracing; 7+ AI calls per analysis have no trace context</div></div></div>
+      <div class="check-item"><div class="check-icon">❌</div><div class="check-text"><div class="check-title">Dashboards: operational dashboards for key flows</div><div class="check-detail">No infrastructure operational dashboards; PostHog advisor generates user dashboards but not for the app itself</div></div></div>
+    </div>
+  </details>
+
+  <!-- TOP ISSUES -->
+  <h2>Top Issues</h2>
+  <h3>P0 — Must Fix Before Release</h3>
+  <table>
+    <thead><tr><th>ID</th><th>Dim</th><th>File</th><th>Description</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr class="p0-row"><td class="mono">FINDING-001</td><td>D4</td><td class="mono red">request-otp/route.ts:1</td><td>No rate limiting on OTP request endpoint — attacker can flood victim's email or exhaust email quota</td><td>IP-based rate limit: 3 OTP per email per 15 min</td></tr>
+      <tr class="p0-row"><td class="mono">FINDING-002</td><td>D4</td><td class="mono red">verify-otp/route.ts:1</td><td>No brute-force lockout on OTP verification — 6-digit OTP brute-forceable in ~1M requests</td><td>Add attempt counter; lock after 5 failed attempts</td></tr>
+      <tr class="p0-row"><td class="mono">FINDING-003</td><td>D7</td><td class="mono red">api/email/route.ts:22</td><td>No try/catch around prisma.emailCapture.create — unhandled DB exception crashes the handler</td><td>Wrap in try/catch; return {error:'...'} with 500</td></tr>
+      <tr class="p0-row"><td class="mono">FINDING-004</td><td>D7</td><td class="mono red">analyze/page.tsx:17</td><td>averageScore() divides by scores.length with no guard — returns NaN; ScoreGauge renders broken SVG arc</td><td>Add guard: if (scores.length === 0) return 0</td></tr>
+      <tr class="p0-row"><td class="mono">FINDING-015</td><td>D6</td><td class="mono red">lib/encrypt.ts:4</td><td>Hardcoded fallback encryption key when SESSION_SECRET is unset — PostHog keys encrypted with known key</td><td>Throw unconditionally if SESSION_SECRET not set</td></tr>
+      <tr class="p0-row"><td class="mono">FINDING-020</td><td>D9</td><td class="mono red">api/email/route.ts:22</td><td>Email addresses (PII) collected with no consent mechanism — GDPR Article 6 violation</td><td>Add consent checkbox; document lawful basis</td></tr>
+      <tr class="p0-row"><td class="mono">FINDING-021</td><td>D9</td><td class="mono red">src/app/ (global)</td><td>No cookie consent banner or opt-in mechanism — ePrivacy Directive / PECR compliance gap</td><td>Implement cookie consent banner before tracking</td></tr>
+    </tbody>
+  </table>
+
+  <h3>P1 — Top Priority Items</h3>
+  <table>
+    <thead><tr><th>ID</th><th>Dim</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr class="p1-row"><td class="mono">FINDING-005</td><td>D2</td><td>No authentication on /api/email — arbitrary email/slug associations possible. Add auth or CAPTCHA.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-006</td><td>D4</td><td>No rate limiting on email capture endpoint. Apply 3 captures/IP/hour.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-007</td><td>D8</td><td>SignInModal label elements have no htmlFor — inputs not associated. Add id/htmlFor pairs.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-008</td><td>D8</td><td>PostHog settings form labels lack htmlFor; inputs have no id attributes.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-009</td><td>D8</td><td>Email capture input has no label element at all. Add visually-hidden label or aria-label.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-010</td><td>D8</td><td>UserNav dropdown toggle missing aria-expanded, aria-haspopup, aria-controls.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-011</td><td>D8</td><td>Expert card expand/collapse button missing aria-expanded.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-012</td><td>D8</td><td>No skip navigation link. Add &lt;a href="#main-content"&gt;Skip to content&lt;/a&gt; in layout.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-013</td><td>D8</td><td>Error messages not linked to inputs via aria-describedby.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-014</td><td>D8</td><td>LoadingExpert list has no role='status' or aria-live region.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-016</td><td>D9</td><td>OTP token logged in plaintext when RESEND_API_KEY unset. Mask in logs.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-022</td><td>D9</td><td>No data retention policies. Add 90-day cleanup cron. GDPR Art. 5(1)(e).</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-023</td><td>D9</td><td>No right-to-erasure endpoint. Implement DELETE /api/auth/account. GDPR Art. 17.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-025</td><td>D9</td><td>IP addresses stored indefinitely. Anonymize after 30 days.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-028</td><td>D9</td><td>AES-256-CBC used instead of authenticated AES-256-GCM. Migrate encryption.</td></tr>
+      <tr class="p1-row"><td class="mono">FINDING-029</td><td>D10</td><td>Logger missing correlation/request IDs. Add requestId via AsyncLocalStorage.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TEST EXECUTION -->
+  <h2>Test Execution Results</h2>
+  <table>
+    <thead><tr><th>Category</th><th>Files</th><th>Tests</th><th>Passed</th><th>Failed</th><th>Pass Rate</th></tr></thead>
+    <tbody>
+      <tr><td>Hand-written (<code>src/__tests__/</code>)</td><td>16</td><td>163</td><td class="green">163</td><td>0</td><td class="green">100%</td></tr>
+      <tr><td>Generated — Findings-Driven (Phase 2)</td><td>4</td><td>55</td><td class="green">55</td><td>0</td><td class="green">100%</td></tr>
+      <tr><td>E2E Workflow Tests (Phase 3)</td><td>4</td><td>72</td><td class="green">72</td><td>0</td><td class="green">100%</td></tr>
+      <tr><td>Playwright UI Tests (Phase 3b)</td><td>5 + fixture</td><td>60</td><td class="text2">—</td><td class="text2">—</td><td class="yellow">DEFERRED</td></tr>
+      <tr style="font-weight:700;"><td><strong>TOTAL (Jest)</strong></td><td><strong>24</strong></td><td><strong>290</strong></td><td class="green"><strong>290</strong></td><td><strong>0</strong></td><td class="green"><strong>100%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Generated Tests by Dimension (Phase 2)</h3>
+  <table>
+    <thead><tr><th>File</th><th>Dimension</th><th>Tests</th><th>Findings Targeted</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">d4-security.gen.test.ts</td><td>D4</td><td>14</td><td>FINDING-001, -002, -005, -006</td></tr>
+      <tr><td class="mono">d7-edge-cases.gen.test.ts</td><td>D7</td><td>9</td><td>FINDING-003, -004</td></tr>
+      <tr><td class="mono">d9-compliance.gen.test.ts</td><td>D9</td><td>10</td><td>FINDING-022, -023</td></tr>
+      <tr><td class="mono">d10-observability.gen.test.ts</td><td>D10</td><td>22</td><td>FINDING-029</td></tr>
+    </tbody>
+  </table>
+
+  <h3>E2E Workflows (Phase 3)</h3>
+  <table>
+    <thead><tr><th>Workflow</th><th>Dimensions</th><th>Tests</th><th>Endpoints</th></tr></thead>
+    <tbody>
+      <tr><td>auth-flow</td><td>D2, D4</td><td>13</td><td>POST /api/auth/request-otp, verify-otp, GET /api/auth/me, POST /api/auth/signout</td></tr>
+      <tr><td>analysis-lifecycle</td><td>D2, D5</td><td>17</td><td>POST /api/analyze, POST /api/results, GET /api/results/[slug], GET /api/history</td></tr>
+      <tr><td>posthog-settings-crud</td><td>D2, D4, D5</td><td>29</td><td>POST/GET/DELETE /api/settings/posthog, POST /api/settings/posthog/test</td></tr>
+      <tr><td>rate-limit-enforcement</td><td>D4, D7</td><td>20</td><td>POST /api/analyze, /api/bulk, /api/compare</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:0.75rem; font-size:0.82rem; color:var(--text2);">E2E endpoint coverage: 13/16 (81%) &nbsp;|&nbsp; 5 Playwright tests marked <code>test.fail()</code> intentionally confirm FINDING-010, -012, -013.</p>
+
+  <!-- FAILED TESTS -->
+  <h2>Failed Tests</h2>
+  <p style="color:var(--green); font-weight:600;">Zero failures. All 290 Jest tests passed (100% pass rate).</p>
+  <p style="color:var(--text2); font-size:0.85rem; margin-top:0.5rem;">No flaky or intermittent failures were detected. The 5 Playwright tests marked <code>test.fail()</code> are intentional — they document known accessibility findings and are not failures.</p>
+
+  <!-- COVERAGE ANALYSIS -->
+  <h2>Test Coverage Analysis</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Level</th><th>Test Count</th><th>Key Gaps</th></tr></thead>
+    <tbody>
+      <tr><td>D1 — UI/UX</td><td class="red">ZERO</td><td>0</td><td>Entire frontend untested — no component, page, or navigation tests; Playwright deferred</td></tr>
+      <tr><td>D2 — API</td><td class="green">STRONG</td><td>170</td><td>No response header tests, no concurrent request tests</td></tr>
+      <tr><td>D3 — Performance</td><td class="red">ZERO</td><td>0</td><td>No timing, caching, load, or N+1 query tests</td></tr>
+      <tr><td>D4 — Security</td><td class="green">STRONG</td><td>199</td><td>No CSRF, horizontal privilege escalation, or prompt injection tests</td></tr>
+      <tr><td>D5 — Data Integrity</td><td class="yellow">MODERATE</td><td>60</td><td>No constraint violation, transaction rollback, or DB unavailable tests</td></tr>
+      <tr><td>D6 — Infrastructure</td><td class="red">ZERO</td><td>0</td><td>Health/provider tests exist in hand-written suite; no env config, migration, startup tests generated</td></tr>
+      <tr><td>D7 — Edge Cases</td><td class="green">STRONG</td><td>100</td><td>No extremely long input, binary content, or bulk all-fail tests</td></tr>
+      <tr><td>D8 — Accessibility</td><td class="red">ZERO</td><td>0</td><td>No accessibility tests whatsoever (Playwright specs scaffolded but deferred)</td></tr>
+      <tr><td>D9 — Compliance</td><td class="red">WEAK</td><td>10</td><td>Only endpoint existence checks; no consent, privacy, IP retention, or audit tests</td></tr>
+      <tr><td>D10 — Observability</td><td class="red">WEAK</td><td>22</td><td>No logging format validation in live request context, no metrics, no alerting tests</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TREND TABLE -->
+  <h2>Trend vs Previous Run</h2>
+  <p style="color:var(--text2); font-size:0.82rem; margin-bottom:0.75rem;">Previous run: 2026-03-22 (Phase 1 static-only). Current run: 2026-03-23 (full pipeline, composite scores).</p>
+  <table>
+    <thead><tr><th>Dimension</th><th>2026-03-22</th><th>2026-03-23</th><th>Delta</th><th>Trend</th></tr></thead>
+    <tbody>
+      <tr><td>D1 — UI/UX</td><td>71.0%</td><td>57.1%</td><td class="red">-13.9</td><td class="trend-down">↓</td></tr>
+      <tr><td>D2 — API</td><td>83.0%</td><td>79.2%</td><td class="red">-3.8</td><td class="trend-down">↓</td></tr>
+      <tr><td>D3 — Performance</td><td>60.0%</td><td>66.7%</td><td class="green">+6.7</td><td class="trend-up">↑</td></tr>
+      <tr><td>D4 — Security</td><td>50.0%</td><td>82.2%</td><td class="green">+32.2</td><td class="trend-up">↑</td></tr>
+      <tr><td>D5 — Data Integrity</td><td>58.0%</td><td>79.2%</td><td class="green">+21.2</td><td class="trend-up">↑</td></tr>
+      <tr><td>D6 — Infrastructure</td><td>50.0%</td><td>66.7%</td><td class="green">+16.7</td><td class="trend-up">↑</td></tr>
+      <tr><td>D7 — Edge Cases</td><td>50.0%</td><td>75.0%</td><td class="green">+25.0</td><td class="trend-up">↑</td></tr>
+      <tr><td>D8 — Accessibility</td><td>29.0%</td><td>7.1%</td><td class="red">-21.9</td><td class="trend-down">↓</td></tr>
+      <tr><td>D9 — Compliance</td><td>14.0%</td><td>53.6%</td><td class="green">+39.6</td><td class="trend-up">↑</td></tr>
+      <tr><td>D10 — Observability</td><td>7.0%</td><td>57.2%</td><td class="green">+50.2</td><td class="trend-up">↑</td></tr>
+      <tr style="font-weight:700;"><td><strong>Overall</strong></td><td>47.0%</td><td>62.4%</td><td class="green"><strong>+15.4</strong></td><td class="trend-up">↑</td></tr>
+      <tr><td>Gate</td><td class="red">BLOCKED</td><td class="yellow">CONDITIONAL</td><td>—</td><td class="trend-up">↑</td></tr>
+    </tbody>
+  </table>
+  <p style="color:var(--text2); font-size:0.8rem; margin-top:0.5rem;">D1/D2/D8 decreases reflect more precise static scoring vs prior run's estimates. Large increases in D4, D7, D9, D10 reflect addition of execution scores from generated and E2E tests.</p>
+
+  <!-- AI STATISTICS -->
+  <h2>Agentic AI Statistics</h2>
+  <table>
+    <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Model</td><td>claude-sonnet-4-6</td></tr>
+      <tr><td>Pipeline Phases Executed</td><td>6 (Phase 1 Static, 2 Gen, 3 E2E, 3b Playwright, 4 Exec, 5 Report)</td></tr>
+      <tr><td>Files Analyzed (Phase 1)</td><td>68 files</td></tr>
+      <tr><td>Lines of Code Analyzed</td><td>~3,800</td></tr>
+      <tr><td>Total Findings Generated</td><td>35 (7 P0, 16 P1, 12 P2)</td></tr>
+      <tr><td>Test Files Generated</td><td>14 (4 findings-driven + 4 E2E workflow + 5 Playwright spec + 1 fixture)</td></tr>
+      <tr><td>Lines of Test Code Generated</td><td>~3,705</td></tr>
+      <tr><td>Tests Written by AI</td><td>184 (55 findings-driven + 72 E2E Jest + 60 Playwright + 1 fixture module)</td></tr>
+      <tr><td>Tests Executed (Jest)</td><td>290</td></tr>
+      <tr><td>Tests Passed</td><td>290 (100%)</td></tr>
+      <tr><td>Tests Failed</td><td>0</td></tr>
+      <tr><td>Execution Duration</td><td>4,039ms</td></tr>
+      <tr><td>Endpoints Covered (E2E)</td><td>13 / 16 (81%)</td></tr>
+      <tr><td>Composite Score Improvement</td><td>+15.4 points (47.0% → 62.4%)</td></tr>
+      <tr><td>Gate Change</td><td>BLOCKED → CONDITIONAL</td></tr>
+    </tbody>
+  </table>
+
+  <!-- RECOMMENDED NEXT STEPS -->
+  <h2>Recommended Next Steps</h2>
+
+  <h3>P0 — Critical (Block Release)</h3>
+  <ol style="padding-left:1.5rem; margin-bottom:1rem;">
+    <li style="margin-bottom:0.5rem;"><strong>Add rate limiting to OTP endpoints</strong> (FINDING-001, -002) — <code>src/app/api/auth/request-otp/route.ts</code> and <code>verify-otp/route.ts</code>. Apply existing <code>rateLimit()</code> utility; add 5-attempt lockout on verify. ~2 hours.</li>
+    <li style="margin-bottom:0.5rem;"><strong>Remove hardcoded encryption fallback key</strong> (FINDING-015) — <code>src/lib/encrypt.ts</code>. Throw unconditionally if SESSION_SECRET missing; add to <code>.env.local.example</code>. ~30 minutes.</li>
+    <li style="margin-bottom:0.5rem;"><strong>Wrap /api/email in try/catch</strong> (FINDING-003) — <code>src/app/api/email/route.ts</code>. Add standard try/catch pattern. ~15 minutes.</li>
+    <li style="margin-bottom:0.5rem;"><strong>Fix averageScore() NaN guard</strong> (FINDING-004) — <code>src/app/[locale]/analyze/page.tsx:17</code>. Add <code>if (scores.length === 0) return 0</code>. ~5 minutes.</li>
+    <li style="margin-bottom:0.5rem;"><strong>Add GDPR consent to email capture</strong> (FINDING-020) — Add explicit consent checkbox; document lawful basis. ~4 hours.</li>
+    <li style="margin-bottom:0.5rem;"><strong>Implement cookie consent banner</strong> (FINDING-021) — Add consent mechanism before any non-essential tracking. ~4 hours.</li>
+  </ol>
+
+  <h3>P1 — High Priority (Next Sprint)</h3>
+  <ol style="padding-left:1.5rem; margin-bottom:1rem;">
+    <li style="margin-bottom:0.5rem;"><strong>Accessibility remediation sprint</strong> (FINDING-007 through -014) — Add id/htmlFor pairs to all form labels; aria-expanded to UserNav; skip navigation link to layout; aria-hidden to decorative SVGs; aria-live to LoadingExpert; fix color contrast (text-gray-400 → text-gray-600). ~1–2 days.</li>
+    <li style="margin-bottom:0.5rem;"><strong>GDPR data management</strong> (FINDING-022, -023, -025) — Implement <code>DELETE /api/auth/account</code>; add 90-day cleanup cron; anonymize IPs after 30 days. ~1 day.</li>
+    <li style="margin-bottom:0.5rem;"><strong>Upgrade encryption to AES-256-GCM</strong> (FINDING-028) — Migrate from CBC; re-encrypt stored PostHog keys. ~3 hours.</li>
+    <li style="margin-bottom:0.5rem;"><strong>Add request correlation IDs</strong> (FINDING-029) — Generate requestId in middleware; pass via AsyncLocalStorage to all log calls. ~3 hours.</li>
+  </ol>
+
+  <h3>P2 — Medium Priority (Future Sprints)</h3>
+  <ol style="padding-left:1.5rem;">
+    <li style="margin-bottom:0.25rem;">Integrate Sentry for production error aggregation (FINDING-030)</li>
+    <li style="margin-bottom:0.25rem;">Add <code>/api/metrics</code> endpoint with analyses/day, error rate, rate-limit hit rate (FINDING-031)</li>
+    <li style="margin-bottom:0.25rem;">Add composite DB indexes: <code>(userId, createdAt)</code> and <code>(ip, createdAt)</code> for rate-limit queries</li>
+    <li style="margin-bottom:0.25rem;">Cache PostHog config per user per request</li>
+    <li style="margin-bottom:0.25rem;">Add AbortSignal timeout to all AI provider <code>complete()</code> calls</li>
+    <li style="margin-bottom:0.25rem;">Add Dockerfile and docker-compose.yml for containerized deployment</li>
+    <li>Run Playwright tests once <code>@playwright/test</code> is installed; 5 intentionally failing tests should confirm and then be fixed</li>
+  </ol>
+
+  <!-- RECOMMENDATION -->
+  <h2>Recommendation</h2>
+  <div style="background:var(--bg2); border:2px solid var(--yellow); border-radius:10px; padding:1.25rem; margin-top:0.5rem;">
+    <div style="font-size:1rem; font-weight:700; color:var(--orange); margin-bottom:0.5rem;">CONDITIONAL — Do not release without resolving P0 items</div>
+    <p style="font-size:0.88rem; color:var(--text2); line-height:1.7;">
+      The pipeline has moved from BLOCKED (static-only, 45.0%) to CONDITIONAL (full composite, 62.4%), representing +15.4 points of improvement through test coverage across the stack. All 290 Jest tests pass at 100%. However, 7 P0 findings remain open — including two unprotected OTP attack surfaces that enable account takeover, a hardcoded encryption key that compromises stored credentials in misconfigured environments, and two GDPR violations (unconsented PII collection, no cookie consent). Accessibility (D8: 7.1%) and Compliance (D9 static: 7.1%) indicate these areas have received no development attention. Resolving all P0 items and the highest-impact P1 accessibility and GDPR items is required before production launch (estimated 2–3 sprints).
+    </p>
+  </div>
+
+  <footer>
+    <p>PRISM Pipeline Report &mdash; Landing Page Advisor &mdash; 2026-03-23 &mdash; Generated by claude-sonnet-4-6</p>
+    <p style="margin-top:0.25rem;">Artifacts: <code>.qc-artifacts/results/pipeline-full-2026-03-23.md</code> &nbsp;|&nbsp; <code>.qc-artifacts/results/pipeline-full-2026-03-23.html</code></p>
+  </footer>
+
+</div>
+</body>
+</html>
