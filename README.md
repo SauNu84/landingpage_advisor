@@ -4,6 +4,16 @@ AI-powered landing page analysis tool. Paste any URL and get expert-quality feed
 
 Supports **Anthropic Claude** and **OpenAI GPT** as interchangeable AI backends.
 
+## Screenshots
+
+**Landing Page** — paste any URL and choose your analysis mode:
+
+![Landing Page](public/screenshots/landing-page.png)
+
+**Results Dashboard** — overall score, top actions, and 6 expert cards with per-expert scores, strengths, weaknesses, and recommendations:
+
+![Results Dashboard](public/screenshots/results-page.png)
+
 ## Prerequisites
 
 - **Node.js** 18+ and **npm**
